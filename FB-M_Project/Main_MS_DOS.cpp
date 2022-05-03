@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
-#include <unistd.h>
+#include <windows.h>
 using namespace std;
 class footBall_Player
 {
@@ -200,7 +200,7 @@ public:
 // Xem Thong tin cua 2 doi trong 1 tran dau
 void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
 {
-    system("clear");
+    system("cls");
     for (int i = 0; i < n; i++)
     {
         if (team[i].getTeamName() == name1)
@@ -303,7 +303,7 @@ void titleBox()
 }
 int main()
 {
-    system("clear");
+    system("cls");
     int numOfTeam, numOfMatch;
     footBall_Team *ListTeam = new footBall_Team[10];
     footBall_Match *ListMatch = new footBall_Match[10];
@@ -324,7 +324,7 @@ int main()
         {
         case 1:
         {
-            system("clear");
+            system("cls");
             string border = "+--------------------------+---------------------+----------------+";
             cout << border << endl;
             cout << "| " << left << setw(25) << "TEN DOI"
@@ -340,7 +340,7 @@ int main()
             int select;
             cout << "Chon doi bong can xem thong tin chi tiet: ";
             cin >> select;
-            system("clear");
+            system("cls");
             ListTeam[select - 1].showDetail();
             break;
         }
@@ -358,7 +358,7 @@ int main()
             {
             case 1:
             {
-                system("clear");
+                system("cls");
                 for (int i = 0; i < numOfMatch; i++)
                     ListMatch[i].showInfo();
                 cout << "Chon tran dau: ";
@@ -373,7 +373,7 @@ int main()
             }
             case 3:
             {
-                system("clear");
+                system("cls");
                 titleBox();
                 break;
             }
@@ -382,31 +382,31 @@ int main()
         }
         case 3:
         {
-            system("clear");
+            system("cls");
             cout << "Tinh nang nay dang trong qua trinh phat trien!" << endl;
             cout << "Ban se duoc tro ve menu sau 5s...";
-            sleep(5);
-            system("clear");
+            Sleep(5000);
+            system("cls");
             titleBox();
             break;
         }
         case 4:
         {
-            system("clear");
+            system("cls");
             filTer(ListTeam, numOfTeam);
             cout << "Nhan phim bat ky de tro ve menu";
             getchar();
-            system("clear");
+            system("cls");
             titleBox();
             break;
         }
         case 5:
         {
-            system("clear");
+            system("cls");
             cout << "Tinh nang nay dang trong qua trinh phat trien!" << endl;
-            cout << "Ban se duoc tro ve menu sau 3s...";
-            sleep(3);
-            system("clear");
+            cout << "Ban se duoc tro ve menu sau 5s...";
+            Sleep(5000);
+            system("cls");
             titleBox();
             break;
         }
