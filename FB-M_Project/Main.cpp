@@ -404,8 +404,8 @@ int main()
         {
             system("clear");
             cout << "Tinh nang nay dang trong qua trinh phat trien!" << endl;
-            cout << "Ban se duoc tro ve menu sau 3s...";
-            sleep(3);
+            cout << "Ban se duoc tro ve menu sau 5s...";
+            sleep(5);
             system("clear");
             titleBox();
             break;
