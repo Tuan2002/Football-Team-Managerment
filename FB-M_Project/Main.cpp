@@ -57,6 +57,10 @@ protected:
     string coach;
     footBall_Player *member;
     int numOfPlayer;
+    int point;
+    int winMatch;
+    int loseMatch;
+    int drawMatch;
 
 public:
     footBall_Team()
@@ -66,6 +70,10 @@ public:
         coach = "";
         member = NULL;
         numOfPlayer = 0;
+        point = 0;
+        winMatch = 0;
+        loseMatch = 0;
+        drawMatch = 0;
     }
     footBall_Team(string &teamName, string &country, string &coach)
     {
@@ -73,6 +81,10 @@ public:
         this->country = country;
         this->coach = coach;
         numOfPlayer = 11;
+        point = 0;
+        winMatch = 0;
+        loseMatch = 0;
+        drawMatch = 0;
         string fileName = "./Danh Sach Cau Thu/" + teamName + ".csv";
         // Ten file vi du "Song Lam Nghe Anh.csv"
         member = new footBall_Player[numOfPlayer];
@@ -128,6 +140,15 @@ public:
         }
         cout << border1 << endl;
     }
+    void showPoint()
+    {
+        cout << "| " << left << setw(25) << teamName;
+        cout << "|   " << left << setw(4) << winMatch;
+        cout << "|   " << left << setw(4) << loseMatch;
+        cout << "|   " << left << setw(4) << drawMatch;
+        cout << "|   " << left << setw(4) << point;
+        cout << "|" << endl;
+    }
     string getTeamName()
     {
         return teamName;
@@ -135,6 +156,22 @@ public:
     string getCountry()
     {
         return country;
+    }
+    void setPoint(int point)
+    {
+        this->point += point;
+    }
+    void setWinMatch(int winMatch)
+    {
+        this->winMatch += winMatch;
+    }
+    void setLoseMatch(int loseMatch)
+    {
+        this->loseMatch += loseMatch;
+    }
+    void setDrawMatch(int drawMatch)
+    {
+        this->drawMatch += drawMatch;
     }
     footBall_Team(footBall_Team &copy)
     {
@@ -181,12 +218,19 @@ public:
         this->team1Name = team1_Name;
         this->team2Name = team2_Name;
     }
-    void showInfo()
+    void showMatchInfo()
     {
-        cout << setw(20) << "\t\t" << stadum << endl;
-        cout << setw(20) << "\t\t" << time << endl;
-        cout << setw(10) << left << "   " << team1Name << setw(10) << right << "\t\t" << team2Name << endl;
-        cout << setw(10) << left << "\t" << score1 << setw(15) << right << "\t\t   — \t\t " << score2 << endl;
+        cout << "| " << left << setw(20) << stadum;
+        cout << "| " << left << setw(11) << time;
+        cout << "| " << left << setw(20) << team1Name;
+        cout << "| " << left << setw(5) << score1 << " - " << right << setw(5) << score2;
+        cout << " | " << left << setw(20) << team2Name;
+        cout << "|" << endl;
+
+        // cout << setw(20) << "\t\t" << stadum << endl;
+        // cout << setw(20) << "\t\t" << time << endl;
+        // cout << setw(10) << left << "   " << team1Name << setw(10) << right << "\t\t" << team2Name << endl;
+        // cout << setw(10) << left << "\t" << score1 << setw(15) << right << "\t\t   — \t\t " << score2 << endl;
     }
     string getNameTeam1()
     {
@@ -196,22 +240,47 @@ public:
     {
         return team2Name;
     }
+    friend void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);
 };
-// Xem Thong tin cua 2 doi trong 1 tran dau
-void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
+void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam)
 {
-    system("clear");
-    for (int i = 0; i < n; i++)
-    {
-        if (team[i].getTeamName() == name1)
-        {
-            team[i].showDetail();
-        }
-        if (team[i].getTeamName() == name2)
-        {
-            team[i].showDetail();
-        }
-    }
+    for (int i = 0; i < numofMatch; i++)
+        if (match[i].score1 > match[i].score2)
+            for (int j = 0; j < numofTeam; j++)
+            {
+                if (match[i].getNameTeam1() == team[j].getTeamName())
+                {
+                    team[j].setPoint(3);
+                    team[j].setWinMatch(1);
+                };
+                if (match[i].getNameTeam2() == team[j].getTeamName())
+                    team[j].setLoseMatch(1);
+            }
+        else if (match[i].score1 < match[i].score2)
+            for (int j = 0; j < numofTeam; j++)
+            {
+                if (match[i].getNameTeam2() == team[j].getTeamName())
+                {
+                    team[j].setPoint(3);
+                    team[j].setWinMatch(1);
+                };
+                if (match[i].getNameTeam1() == team[j].getTeamName())
+                    team[j].setLoseMatch(1);
+            }
+        else
+            for (int j = 0; j < numofTeam; j++)
+            {
+                if (match[i].getNameTeam1() == team[j].getTeamName())
+                {
+                    team[j].setPoint(1);
+                    team[j].setDrawMatch(1);
+                }
+                if (match[i].getNameTeam2() == team[j].getTeamName())
+                {
+                    team[j].setPoint(1);
+                    team[j].setDrawMatch(1);
+                }
+            }
 }
 void filTer(footBall_Team *team, int n)
 {
@@ -237,6 +306,7 @@ void filTer(footBall_Team *team, int n)
                 count++;
             }
         }
+        system("clear");
         cout << "Co (" << count << ") doi bong thuoc dia phuong: " << country << endl;
         for (int i = 0; i < count; i++)
         {
@@ -282,6 +352,38 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &n
     fin.close();
     numOfMatch = count;
 }
+// Xem Thong tin cua 2 doi trong 1 tran dau
+void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
+{
+    system("clear");
+    cout << "Thong tin doi thu nhat: " << endl;
+    for (int i = 0; i < n; i++)
+        if (team[i].getTeamName() == name1)
+            team[i].showDetail();
+    cout << "Bam phim bat ki de tiep tuc xem... ";
+    fflush(stdin);
+    getchar();
+    system("clear");
+    cout << "Thong tin doi thu hai: " << endl;
+    for (int i = 0; i < n; i++)
+        if (team[i].getTeamName() == name2)
+            team[i].showDetail();
+}
+void scoreBoard(footBall_Match *match, int numOfMatch)
+{
+    string border = "+---------------------+------------+---------------------+---------------+---------------------+";
+    cout << border << endl;
+    cout << "| " << left << setw(20) << "SAN VAN DONG";
+    cout << "| " << setw(11) << "THOI GIAN";
+    cout << "| " << setw(20) << "TEN DOI BONG A";
+    cout << "| " << setw(14) << "    TI SO";
+    cout << "| " << setw(20) << "TEN DOI BONG B";
+    cout << "|" << endl;
+    cout << border << endl;
+    for (int i = 0; i < numOfMatch; i++)
+        match[i].showMatchInfo();
+    cout << border << endl;
+}
 void titleBox()
 {
     string border0 = "*********************************************";
@@ -305,9 +407,10 @@ int main()
 {
     system("clear");
     int numOfTeam, numOfMatch;
-    footBall_Team *ListTeam = new footBall_Team[10];
-    footBall_Match *ListMatch = new footBall_Match[10];
+    footBall_Team *ListTeam = new footBall_Team[20];
+    footBall_Match *ListMatch = new footBall_Match[20];
     readFile(ListTeam, numOfTeam, ListMatch, numOfMatch);
+    calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
     int choice;
     titleBox();
     while (choice != 6)
@@ -342,13 +445,18 @@ int main()
             cin >> select;
             system("clear");
             ListTeam[select - 1].showDetail();
+            cout << "Bam phim bat ki de tro ve menu chinh... ";
+            fflush(stdin);
+            getchar();
+            system("clear");
+            titleBox();
             break;
         }
         case 2:
         {
             int selection;
-            for (int i = 0; i < numOfMatch; i++)
-                ListMatch[i].showInfo();
+            system("clear");
+            scoreBoard(ListMatch, numOfMatch);
             cout << "1. Xem thong tin chi tiet hai doi" << endl;
             cout << "2. Xem thong ke diem cua hai doi" << endl;
             cout << "3. Tro ve menu" << endl;
@@ -359,16 +467,43 @@ int main()
             case 1:
             {
                 system("clear");
-                for (int i = 0; i < numOfMatch; i++)
-                    ListMatch[i].showInfo();
+                scoreBoard(ListMatch, numOfMatch);
                 cout << "Chon tran dau: ";
                 int choice;
                 cin >> choice;
                 showTeamInfo(ListTeam, numOfTeam, ListMatch[choice - 1].getNameTeam1(), ListMatch[choice - 1].getNameTeam2());
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                fflush(stdin);
+                getchar();
+                system("clear");
+                titleBox();
                 break;
             }
             case 2:
             {
+                system("clear");
+                scoreBoard(ListMatch, numOfMatch);
+                cout << "Chon tran dau: ";
+                int choice;
+                cin >> choice;
+                system("clear");
+                string border = "+--------------------------+-------+-------+-------+-------+";
+                cout << border << endl;
+                cout << "| " << left << setw(25) << "TEN DOI BONG"
+                     << "| " << setw(6) << "THANG"
+                     << "| " << setw(6) << "THUA"
+                     << "| " << setw(6) << " HOA"
+                     << "| " << setw(6) << "DIEM"
+                     << "|" << endl;
+                cout << border << endl;
+                for (int i = 0; i < numOfTeam; i++)
+                {
+                    if (ListTeam[i].getTeamName() == ListMatch[choice - 1].getNameTeam1())
+                        ListTeam[i].showPoint();
+                    if (ListTeam[i].getTeamName() == ListMatch[choice - 1].getNameTeam2())
+                        ListTeam[i].showPoint();
+                }
+                cout << border << endl;
                 break;
             }
             case 3:
@@ -383,9 +518,22 @@ int main()
         case 3:
         {
             system("clear");
-            cout << "Tinh nang nay dang trong qua trinh phat trien!" << endl;
-            cout << "Ban se duoc tro ve menu sau 5s...";
-            sleep(5);
+            cout << "Thong tin diem cua cac doi bong: " << endl;
+            string border = "+--------------------------+-------+-------+-------+-------+";
+            cout << border << endl;
+            cout << "| " << left << setw(25) << "TEN DOI BONG"
+                 << "| " << setw(6) << "THANG"
+                 << "| " << setw(6) << "THUA"
+                 << "| " << setw(6) << " HOA"
+                 << "| " << setw(6) << "DIEM"
+                 << "|" << endl;
+            cout << border << endl;
+            for (int i = 0; i < numOfTeam; i++)
+                ListTeam[i].showPoint();
+            cout << border << endl;
+            cout << "Bam phim bat ki de tro ve menu chinh... ";
+            fflush(stdin);
+            getchar();
             system("clear");
             titleBox();
             break;
@@ -394,7 +542,8 @@ int main()
         {
             system("clear");
             filTer(ListTeam, numOfTeam);
-            cout << "Nhan phim bat ky de tro ve menu";
+            cout << "Bam phim bat ki de tro ve menu chinh... ";
+            fflush(stdin);
             getchar();
             system("clear");
             titleBox();
