@@ -80,14 +80,14 @@ public:
         this->teamName = teamName;
         this->country = country;
         this->coach = coach;
-        numOfPlayer = 11;
+        numOfPlayer = 0;
         point = 0;
         winMatch = 0;
         loseMatch = 0;
         drawMatch = 0;
         string fileName = "./Danh Sach Cau Thu/" + teamName + ".csv";
         // Ten file vi du "Song Lam Nghe Anh.csv"
-        member = new footBall_Player[numOfPlayer];
+        member = new footBall_Player[20];
         ifstream fin;
         fin.open(fileName);
         int count = 0;
@@ -105,11 +105,15 @@ public:
             member[count] = footBall_Player(name, id, birthDay, nationaly, stoi(height), stoi(weight), locator);
             count++;
         }
+        numOfPlayer = count;
         fin.close();
     }
     void showInfo()
     {
-        cout << "| " << left << setw(25) << teamName << "| " << setw(20) << coach << "| " << setw(14) << country << " |" << endl;
+        cout << "| " << left << setw(25) << teamName
+             << "| " << setw(20) << coach
+             << "| " << setw(14) << country
+             << " |" << endl;
     }
     void showDetail()
     {
@@ -135,9 +139,7 @@ public:
         cout << "|" << endl;
         cout << border1 << endl;
         for (int i = 0; i < numOfPlayer; i++)
-        {
             member[i].showMemberInfo();
-        }
         cout << border1 << endl;
     }
     void showPoint()
@@ -181,14 +183,7 @@ public:
         this->numOfPlayer = copy.numOfPlayer;
         this->member = new footBall_Player[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++)
-        {
             this->member[i] = copy.member[i];
-        }
-    }
-    void addPlayer(footBall_Player player)
-    {
-        member[numOfPlayer] = player;
-        numOfPlayer++;
     }
 };
 class footBall_Match
@@ -226,11 +221,6 @@ public:
         cout << "| " << left << setw(5) << score1 << " - " << right << setw(5) << score2;
         cout << " | " << left << setw(20) << team2Name;
         cout << "|" << endl;
-
-        // cout << setw(20) << "\t\t" << stadum << endl;
-        // cout << setw(20) << "\t\t" << time << endl;
-        // cout << setw(10) << left << "   " << team1Name << setw(10) << right << "\t\t" << team2Name << endl;
-        // cout << setw(10) << left << "\t" << score1 << setw(15) << right << "\t\t   — \t\t " << score2 << endl;
     }
     string getNameTeam1()
     {
@@ -299,19 +289,15 @@ void filTer(footBall_Team *team, int n)
         fflush(stdin);
         getline(cin, country);
         for (int i = 0; i < n; i++)
-        {
             if (team[i].getCountry() == country)
             {
                 FIL_ARRAY[count] = i;
                 count++;
             }
-        }
         system("clear");
         cout << "Co (" << count << ") doi bong thuoc dia phuong: " << country << endl;
         for (int i = 0; i < count; i++)
-        {
             team[FIL_ARRAY[i]].showDetail();
-        }
         break;
     }
 }
@@ -368,6 +354,21 @@ void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
     for (int i = 0; i < n; i++)
         if (team[i].getTeamName() == name2)
             team[i].showDetail();
+}
+void addTeam(footBall_Team *team, int &numOfTeam)
+{
+    string teamName, country, coach;
+    cout << "Nhap ten doi: ";
+    fflush(stdin);
+    getline(cin, teamName);
+    cout << "Nhap dia phuong: ";
+    fflush(stdin);
+    getline(cin, country);
+    cout << "Nhap ten huan luyen vien: ";
+    fflush(stdin);
+    getline(cin, coach);
+    team[numOfTeam] = footBall_Team(teamName, country, coach);
+    numOfTeam++;
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
@@ -436,9 +437,7 @@ int main()
                  << " |" << endl;
             cout << border << endl;
             for (int i = 0; i < numOfTeam; i++)
-            {
                 ListTeam[i].showInfo();
-            }
             cout << border << endl;
             int select;
             cout << "Chon doi bong can xem thong tin chi tiet: ";
@@ -504,6 +503,11 @@ int main()
                         ListTeam[i].showPoint();
                 }
                 cout << border << endl;
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                fflush(stdin);
+                getchar();
+                system("clear");
+                titleBox();
                 break;
             }
             case 3:
@@ -553,7 +557,7 @@ int main()
         {
             system("clear");
             cout << "Tinh nang nay dang trong qua trinh phat trien!" << endl;
-            cout << "Ban se duoc tro ve menu sau 5s...";
+            cout << "Ban se duoc dua ve menu chinh sau 5s..." << endl;
             sleep(5);
             system("clear");
             titleBox();

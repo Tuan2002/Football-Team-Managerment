@@ -504,6 +504,10 @@ int main()
                         ListTeam[i].showPoint();
                 }
                 cout << border << endl;
+                fflush(stdin);
+                getchar();
+                system("cls");
+                titleBox();
                 break;
             }
             case 3:
