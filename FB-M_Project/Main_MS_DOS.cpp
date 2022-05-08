@@ -557,7 +557,7 @@ int main()
         {
             system("cls");
             cout << "Tinh nang nay dang trong qua trinh phat trien!" << endl;
-            cout << "Tinh nang nay dang trong qua trinh phat trien!" << endl;
+            cout << "Ban se duoc dua ve menu chinh sau 5s";
             Sleep(5000);
             system("cls");
             titleBox();
