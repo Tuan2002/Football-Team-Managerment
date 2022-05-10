@@ -352,6 +352,21 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &n
     fin.close();
     numOfMatch = count;
 }
+void addTeam(footBall_Team *team, int &numOfTeam)
+{
+    string teamName, country, coach;
+    cout << "Nhap ten doi: ";
+    fflush(stdin);
+    getline(cin, teamName);
+    cout << "Nhap dia phuong: ";
+    fflush(stdin);
+    getline(cin, country);
+    cout << "Nhap ten huan luyen vien: ";
+    fflush(stdin);
+    getline(cin, coach);
+    team[numOfTeam] = footBall_Team(teamName, country, coach);
+    numOfTeam++;
+}
 // Xem Thong tin cua 2 doi trong 1 tran dau
 void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
 {
