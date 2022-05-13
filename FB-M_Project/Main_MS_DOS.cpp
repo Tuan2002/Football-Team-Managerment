@@ -596,12 +596,24 @@ int main()
         }
         case 5:
         {
-            addTeam(ListTeam, numOfTeam);
-            cout << "Bam phim bat ki de tro ve menu chinh... ";
-            fflush(stdin);
-            getchar();
             system("cls");
-            titleBox();
+            int selection;
+            cout << "1. Them doi bong tu danh sach cho" << endl;
+            cout << "2. Them tran dau" << endl;
+            cout << "3. Xoa doi bong" << endl;
+            cout << "4. Xoa tran dau" << endl;
+            cin >> selection;
+            switch (selection)
+            {
+            case 1:
+                addTeam(ListTeam, numOfTeam);
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                fflush(stdin);
+                getchar();
+                system("cls");
+                titleBox();
+                break;
+            }
         }
         }
     }
