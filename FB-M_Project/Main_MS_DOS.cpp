@@ -602,6 +602,7 @@ int main()
             cout << "2. Them tran dau" << endl;
             cout << "3. Xoa doi bong" << endl;
             cout << "4. Xoa tran dau" << endl;
+            cout << "Nhap lua chon: ";
             cin >> selection;
             switch (selection)
             {

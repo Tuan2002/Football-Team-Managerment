@@ -357,18 +357,44 @@ void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
 }
 void addTeam(footBall_Team *team, int &numOfTeam)
 {
+    footBall_Team *pendingTeam = new footBall_Team[20];
     string teamName, country, coach;
-    cout << "Nhap ten doi: ";
-    fflush(stdin);
-    getline(cin, teamName);
-    cout << "Nhap dia phuong: ";
-    fflush(stdin);
-    getline(cin, country);
-    cout << "Nhap ten huan luyen vien: ";
-    fflush(stdin);
-    getline(cin, coach);
-    team[numOfTeam] = footBall_Team(teamName, country, coach);
+    int pendingTeamAmount = 0;
+    ifstream fin;
+    fin.open("./Doi Bong Cho.csv");
+    fin.ignore(256, '\n');
+    int count = 0;
+    while (!fin.eof())
+    {
+        string teamName, country, coach, temp;
+        getline(fin, teamName, ';');
+        getline(fin, coach, ';');
+        getline(fin, temp, '\n');
+        int possiton = temp.find('\r');
+        country = temp.substr(0, possiton);
+        pendingTeam[count] = footBall_Team(teamName, country, coach);
+        count++;
+    }
+    pendingTeamAmount = count;
+    fin.close();
+    system("clear");
+    string border = "+--------------------------+---------------------+----------------+";
+    cout << border << endl;
+    cout << "| " << left << setw(25) << "TEN DOI"
+         << "| " << setw(20) << "HUAN LUYEN VIEN"
+         << "| " << setw(14) << "DIA PHUONG"
+         << " |" << endl;
+    cout << border << endl;
+    for (int i = 0; i < pendingTeamAmount; i++)
+        pendingTeam[i].showInfo();
+    cout << border << endl;
+    int select;
+    cout << "Co (" << pendingTeamAmount << ") doi bong trong danh sach cho" << endl;
+    cout << "Chon doi bong co trong danh sach de them: ";
+    cin >> select;
+    team[numOfTeam] = pendingTeam[select - 1];
     numOfTeam++;
+    cout << "Doi bong da duoc them vao danh sach" << endl;
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
@@ -556,12 +582,24 @@ int main()
         case 5:
         {
             system("clear");
-            cout << "Tinh nang nay dang trong qua trinh phat trien!" << endl;
-            cout << "Ban se duoc dua ve menu chinh sau 5s..." << endl;
-            sleep(5);
-            system("clear");
-            titleBox();
-            break;
+            int selection;
+            cout << "1. Them doi bong tu danh sach cho" << endl;
+            cout << "2. Them tran dau" << endl;
+            cout << "3. Xoa doi bong" << endl;
+            cout << "4. Xoa tran dau" << endl;
+            cout << "Nhap lua chon: ";
+            cin >> selection;
+            switch (selection)
+            {
+            case 1:
+                addTeam(ListTeam, numOfTeam);
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                fflush(stdin);
+                getchar();
+                system("clear");
+                titleBox();
+                break;
+            }
         }
         }
     }
