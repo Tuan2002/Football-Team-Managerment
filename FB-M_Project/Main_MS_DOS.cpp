@@ -454,7 +454,7 @@ int main()
     int choice;
     welcome.play();
     titleBox();
-    sleep(3);
+    Sleep(3000);
     while (choice != 6)
     {
         cout << "1. Xem thong tin cac doi bong" << endl;
