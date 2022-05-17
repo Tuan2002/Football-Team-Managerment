@@ -397,6 +397,29 @@ void addTeam(footBall_Team *team, int &numOfTeam)
     numOfTeam++;
     cout << "Doi bong da duoc them vao danh sach" << endl;
 }
+void Delete(footBall_Team *team,int &numOfTeam)
+{
+    string border = "+--------------------------+---------------------+----------------+";
+    cout << border << endl;
+    cout << "| " << left << setw(25) << "TEN DOI"
+         << "| " << setw(20) << "HUAN LUYEN VIEN"
+         << "| " << setw(14) << "DIA PHUONG"
+         << " |" << endl;
+    cout << border << endl;
+    for (int i = 0; i < numOfTeam; i++)
+        team[i].showInfo();
+    cout << border  << endl;
+    int select;
+    cout << "Chon doi bong co trong danh sach can xoa: ";
+    cin >> select;
+    for (int i = select -1 ; i < numOfTeam -1 ; i++) 
+    {
+        team[i] = team[i+1];
+    }
+    numOfTeam --;
+    cout << "Da xoa mot doi bong thanh cong !!";
+
+}
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
     string border = "+---------------------+------------+---------------------+---------------+---------------------+";
@@ -431,6 +454,7 @@ void titleBox()
     cout << border1 << endl;
     cout << border0 << endl;
 }
+
 int main()
 {
     sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess;
@@ -605,8 +629,8 @@ int main()
             int selection;
             selectOption.play();
             cout << "1. Them doi bong tu danh sach cho" << endl;
-            cout << "2. Them tran dau" << endl;
-            cout << "3. Xoa doi bong" << endl;
+            cout << "2. Xoa doi bong" << endl;
+            cout << "3. Them tran dau" << endl;
             cout << "4. Xoa tran dau" << endl;
             cout << "Nhap lua chon: ";
             cin >> selection;
@@ -615,6 +639,14 @@ int main()
             case 1:
                 addTeam(ListTeam, numOfTeam);
                 success.play();
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                fflush(stdin);
+                getchar();
+                system("cls");
+                titleBox();
+                break;
+            case 2:
+                Delete(ListTeam, numOfTeam);
                 cout << "Bam phim bat ki de tro ve menu chinh... ";
                 fflush(stdin);
                 getchar();
