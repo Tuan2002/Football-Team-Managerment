@@ -418,7 +418,10 @@ void Delete(footBall_Team *team, int &numOfTeam)
     }
     numOfTeam--;
     cout << "Da xoa mot doi bong thanh cong !!";
-    cout << "Da xoa mot doi bong thanh cong !!";
+}
+void Themtrandau(footBall_Match *match, int &numOfMatch) 
+{
+    cout << "Tran dau dang dien ra";
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
