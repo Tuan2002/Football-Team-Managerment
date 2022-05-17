@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <unistd.h>
+#include "SFML/Audio.hpp"
 using namespace std;
 class footBall_Player
 {
@@ -432,6 +433,18 @@ void titleBox()
 }
 int main()
 {
+    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess;
+    sf::Sound welcome, selectOption, selectTeam, selectMatch, success;
+    welc.loadFromFile("./Audio/Welcome.wav");
+    slcOption.loadFromFile("./Audio/Selectoption.wav");
+    slcTeam.loadFromFile("./Audio/Selectteam.wav");
+    slcMatch.loadFromFile("./Audio/Selectmatch.wav");
+    addSuccess.loadFromFile("./Audio/Addsuccess.wav");
+    welcome.setBuffer(welc);
+    selectOption.setBuffer(slcOption);
+    selectTeam.setBuffer(slcTeam);
+    selectMatch.setBuffer(slcMatch);
+    success.setBuffer(addSuccess);
     system("clear");
     int numOfTeam, numOfMatch;
     footBall_Team *ListTeam = new footBall_Team[20];
@@ -439,7 +452,9 @@ int main()
     readFile(ListTeam, numOfTeam, ListMatch, numOfMatch);
     calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
     int choice;
+    welcome.play();
     titleBox();
+    sleep(3);
     while (choice != 6)
     {
         cout << "1. Xem thong tin cac doi bong" << endl;
@@ -449,6 +464,7 @@ int main()
         cout << "5. Chinh sua du lieu" << endl;
         cout << "6. Thoat chuong trinh" << endl;
         cout << "Nhap lua chon: ";
+        selectOption.play();
         cin >> choice;
         switch (choice)
         {
@@ -466,6 +482,7 @@ int main()
                 ListTeam[i].showInfo();
             cout << border << endl;
             int select;
+            selectTeam.play();
             cout << "Chon doi bong can xem thong tin chi tiet: ";
             cin >> select;
             system("clear");
@@ -482,6 +499,7 @@ int main()
             int selection;
             system("clear");
             scoreBoard(ListMatch, numOfMatch);
+            selectOption.play();
             cout << "1. Xem thong tin chi tiet hai doi" << endl;
             cout << "2. Xem thong ke diem cua hai doi" << endl;
             cout << "3. Tro ve menu" << endl;
@@ -493,6 +511,7 @@ int main()
             {
                 system("clear");
                 scoreBoard(ListMatch, numOfMatch);
+                selectMatch.play();
                 cout << "Chon tran dau: ";
                 int choice;
                 cin >> choice;
@@ -508,6 +527,7 @@ int main()
             {
                 system("clear");
                 scoreBoard(ListMatch, numOfMatch);
+                selectMatch.play();
                 cout << "Chon tran dau: ";
                 int choice;
                 cin >> choice;
@@ -583,6 +603,7 @@ int main()
         {
             system("clear");
             int selection;
+            selectOption.play();
             cout << "1. Them doi bong tu danh sach cho" << endl;
             cout << "2. Them tran dau" << endl;
             cout << "3. Xoa doi bong" << endl;
@@ -593,6 +614,7 @@ int main()
             {
             case 1:
                 addTeam(ListTeam, numOfTeam);
+                success.play();
                 cout << "Bam phim bat ki de tro ve menu chinh... ";
                 fflush(stdin);
                 getchar();

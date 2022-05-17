@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <windows.h>
+#include "SFML/Audio.hpp"
 using namespace std;
 class footBall_Player
 {
@@ -80,14 +81,14 @@ public:
         this->teamName = teamName;
         this->country = country;
         this->coach = coach;
-        numOfPlayer = 11;
+        numOfPlayer = 0;
         point = 0;
         winMatch = 0;
         loseMatch = 0;
         drawMatch = 0;
         string fileName = "./Danh Sach Cau Thu/" + teamName + ".csv";
         // Ten file vi du "Song Lam Nghe Anh.csv"
-        member = new footBall_Player[numOfPlayer];
+        member = new footBall_Player[20];
         ifstream fin;
         fin.open(fileName);
         int count = 0;
@@ -105,11 +106,15 @@ public:
             member[count] = footBall_Player(name, id, birthDay, nationaly, stoi(height), stoi(weight), locator);
             count++;
         }
+        numOfPlayer = count;
         fin.close();
     }
     void showInfo()
     {
-        cout << "| " << left << setw(25) << teamName << "| " << setw(20) << coach << "| " << setw(14) << country << " |" << endl;
+        cout << "| " << left << setw(25) << teamName
+             << "| " << setw(20) << coach
+             << "| " << setw(14) << country
+             << " |" << endl;
     }
     void showDetail()
     {
@@ -135,9 +140,7 @@ public:
         cout << "|" << endl;
         cout << border1 << endl;
         for (int i = 0; i < numOfPlayer; i++)
-        {
             member[i].showMemberInfo();
-        }
         cout << border1 << endl;
     }
     void showPoint()
@@ -181,14 +184,7 @@ public:
         this->numOfPlayer = copy.numOfPlayer;
         this->member = new footBall_Player[numOfPlayer];
         for (int i = 0; i < numOfPlayer; i++)
-        {
             this->member[i] = copy.member[i];
-        }
-    }
-    void addPlayer(footBall_Player player)
-    {
-        member[numOfPlayer] = player;
-        numOfPlayer++;
     }
 };
 class footBall_Match
@@ -226,11 +222,6 @@ public:
         cout << "| " << left << setw(5) << score1 << " - " << right << setw(5) << score2;
         cout << " | " << left << setw(20) << team2Name;
         cout << "|" << endl;
-
-        // cout << setw(20) << "\t\t" << stadum << endl;
-        // cout << setw(20) << "\t\t" << time << endl;
-        // cout << setw(10) << left << "   " << team1Name << setw(10) << right << "\t\t" << team2Name << endl;
-        // cout << setw(10) << left << "\t" << score1 << setw(15) << right << "\t\t   — \t\t " << score2 << endl;
     }
     string getNameTeam1()
     {
@@ -299,19 +290,15 @@ void filTer(footBall_Team *team, int n)
         fflush(stdin);
         getline(cin, country);
         for (int i = 0; i < n; i++)
-        {
             if (team[i].getCountry() == country)
             {
                 FIL_ARRAY[count] = i;
                 count++;
             }
-        }
         system("cls");
         cout << "Co (" << count << ") doi bong thuoc dia phuong: " << country << endl;
         for (int i = 0; i < count; i++)
-        {
             team[FIL_ARRAY[i]].showDetail();
-        }
         break;
     }
 }
@@ -351,6 +338,23 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &n
     }
     fin.close();
     numOfMatch = count;
+}
+// Xem Thong tin cua 2 doi trong 1 tran dau
+void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
+{
+    system("cls");
+    cout << "Thong tin doi thu nhat: " << endl;
+    for (int i = 0; i < n; i++)
+        if (team[i].getTeamName() == name1)
+            team[i].showDetail();
+    cout << "Bam phim bat ki de tiep tuc xem... ";
+    fflush(stdin);
+    getchar();
+    system("cls");
+    cout << "Thong tin doi thu hai: " << endl;
+    for (int i = 0; i < n; i++)
+        if (team[i].getTeamName() == name2)
+            team[i].showDetail();
 }
 void addTeam(footBall_Team *team, int &numOfTeam)
 {
@@ -393,23 +397,6 @@ void addTeam(footBall_Team *team, int &numOfTeam)
     numOfTeam++;
     cout << "Doi bong da duoc them vao danh sach" << endl;
 }
-// Xem Thong tin cua 2 doi trong 1 tran dau
-void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
-{
-    system("cls");
-    cout << "Thong tin doi thu nhat: " << endl;
-    for (int i = 0; i < n; i++)
-        if (team[i].getTeamName() == name1)
-            team[i].showDetail();
-    cout << "Bam phim bat ki de tiep tuc xem... ";
-    fflush(stdin);
-    getchar();
-    system("cls");
-    cout << "Thong tin doi thu hai: " << endl;
-    for (int i = 0; i < n; i++)
-        if (team[i].getTeamName() == name2)
-            team[i].showDetail();
-}
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
     string border = "+---------------------+------------+---------------------+---------------+---------------------+";
@@ -446,6 +433,18 @@ void titleBox()
 }
 int main()
 {
+    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess;
+    sf::Sound welcome, selectOption, selectTeam, selectMatch, success;
+    welc.loadFromFile("./Audio/Welcome.wav");
+    slcOption.loadFromFile("./Audio/Selectoption.wav");
+    slcTeam.loadFromFile("./Audio/Selectteam.wav");
+    slcMatch.loadFromFile("./Audio/Selectmatch.wav");
+    addSuccess.loadFromFile("./Audio/Addsuccess.wav");
+    welcome.setBuffer(welc);
+    selectOption.setBuffer(slcOption);
+    selectTeam.setBuffer(slcTeam);
+    selectMatch.setBuffer(slcMatch);
+    success.setBuffer(addSuccess);
     system("cls");
     int numOfTeam, numOfMatch;
     footBall_Team *ListTeam = new footBall_Team[20];
@@ -453,7 +452,9 @@ int main()
     readFile(ListTeam, numOfTeam, ListMatch, numOfMatch);
     calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
     int choice;
+    welcome.play();
     titleBox();
+    sleep(3);
     while (choice != 6)
     {
         cout << "1. Xem thong tin cac doi bong" << endl;
@@ -463,6 +464,7 @@ int main()
         cout << "5. Chinh sua du lieu" << endl;
         cout << "6. Thoat chuong trinh" << endl;
         cout << "Nhap lua chon: ";
+        selectOption.play();
         cin >> choice;
         switch (choice)
         {
@@ -477,11 +479,10 @@ int main()
                  << " |" << endl;
             cout << border << endl;
             for (int i = 0; i < numOfTeam; i++)
-            {
                 ListTeam[i].showInfo();
-            }
             cout << border << endl;
             int select;
+            selectTeam.play();
             cout << "Chon doi bong can xem thong tin chi tiet: ";
             cin >> select;
             system("cls");
@@ -498,6 +499,7 @@ int main()
             int selection;
             system("cls");
             scoreBoard(ListMatch, numOfMatch);
+            selectOption.play();
             cout << "1. Xem thong tin chi tiet hai doi" << endl;
             cout << "2. Xem thong ke diem cua hai doi" << endl;
             cout << "3. Tro ve menu" << endl;
@@ -509,6 +511,7 @@ int main()
             {
                 system("cls");
                 scoreBoard(ListMatch, numOfMatch);
+                selectMatch.play();
                 cout << "Chon tran dau: ";
                 int choice;
                 cin >> choice;
@@ -524,6 +527,7 @@ int main()
             {
                 system("cls");
                 scoreBoard(ListMatch, numOfMatch);
+                selectMatch.play();
                 cout << "Chon tran dau: ";
                 int choice;
                 cin >> choice;
@@ -545,6 +549,7 @@ int main()
                         ListTeam[i].showPoint();
                 }
                 cout << border << endl;
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
                 fflush(stdin);
                 getchar();
                 system("cls");
@@ -598,6 +603,7 @@ int main()
         {
             system("cls");
             int selection;
+            selectOption.play();
             cout << "1. Them doi bong tu danh sach cho" << endl;
             cout << "2. Them tran dau" << endl;
             cout << "3. Xoa doi bong" << endl;
@@ -608,6 +614,7 @@ int main()
             {
             case 1:
                 addTeam(ListTeam, numOfTeam);
+                success.play();
                 cout << "Bam phim bat ki de tro ve menu chinh... ";
                 fflush(stdin);
                 getchar();
