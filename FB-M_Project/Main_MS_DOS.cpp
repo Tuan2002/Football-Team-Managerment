@@ -397,7 +397,7 @@ void addTeam(footBall_Team *team, int &numOfTeam)
     numOfTeam++;
     cout << "Doi bong da duoc them vao danh sach" << endl;
 }
-void Delete(footBall_Team *team,int &numOfTeam)
+void Delete(footBall_Team *team, int &numOfTeam)
 {
     string border = "+--------------------------+---------------------+----------------+";
     cout << border << endl;
@@ -408,17 +408,17 @@ void Delete(footBall_Team *team,int &numOfTeam)
     cout << border << endl;
     for (int i = 0; i < numOfTeam; i++)
         team[i].showInfo();
-    cout << border  << endl;
+    cout << border << endl;
     int select;
     cout << "Chon doi bong co trong danh sach can xoa: ";
     cin >> select;
-    for (int i = select -1 ; i < numOfTeam -1 ; i++) 
+    for (int i = select - 1; i < numOfTeam - 1; i++)
     {
-        team[i] = team[i+1];
+        team[i] = team[i + 1];
     }
-    numOfTeam --;
+    numOfTeam--;
     cout << "Da xoa mot doi bong thanh cong !!";
-
+    cout << "Da xoa mot doi bong thanh cong !!";
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
