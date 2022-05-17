@@ -397,7 +397,7 @@ void addTeam(footBall_Team *team, int &numOfTeam)
     numOfTeam++;
     cout << "Doi bong da duoc them vao danh sach" << endl;
 }
-void Delete(footBall_Team *team, int &numOfTeam)
+void removeTeam(footBall_Team *team, int &numOfTeam)
 {
     string border = "+--------------------------+---------------------+----------------+";
     cout << border << endl;
@@ -417,7 +417,6 @@ void Delete(footBall_Team *team, int &numOfTeam)
         team[i] = team[i + 1];
     }
     numOfTeam--;
-    cout << "Da xoa mot doi bong thanh cong !!";
     cout << "Da xoa mot doi bong thanh cong !!";
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
@@ -457,18 +456,20 @@ void titleBox()
 
 int main()
 {
-    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess;
-    sf::Sound welcome, selectOption, selectTeam, selectMatch, success;
+    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess, removeSuccess;
+    sf::Sound welcome, selectOption, selectTeam, selectMatch, success, remove;
     welc.loadFromFile("./Audio/Welcome.wav");
     slcOption.loadFromFile("./Audio/Selectoption.wav");
     slcTeam.loadFromFile("./Audio/Selectteam.wav");
     slcMatch.loadFromFile("./Audio/Selectmatch.wav");
     addSuccess.loadFromFile("./Audio/Addsuccess.wav");
+    removeSuccess.loadFromFile("./Audio/Remove.wav");
     welcome.setBuffer(welc);
     selectOption.setBuffer(slcOption);
     selectTeam.setBuffer(slcTeam);
     selectMatch.setBuffer(slcMatch);
     success.setBuffer(addSuccess);
+    remove.setBuffer(removeSuccess);
     system("cls");
     int numOfTeam, numOfMatch;
     footBall_Team *ListTeam = new footBall_Team[20];
@@ -646,7 +647,8 @@ int main()
                 titleBox();
                 break;
             case 2:
-                Delete(ListTeam, numOfTeam);
+                removeTeam(ListTeam, numOfTeam);
+                remove.play();
                 cout << "Bam phim bat ki de tro ve menu chinh... ";
                 fflush(stdin);
                 getchar();
