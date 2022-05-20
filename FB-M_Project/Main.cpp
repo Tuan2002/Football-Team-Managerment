@@ -160,6 +160,10 @@ public:
     {
         return country;
     }
+    int getPoint()
+    {
+        return point;
+    }
     void setPoint(int point)
     {
         this->point += point;
@@ -282,10 +286,10 @@ void filTer(footBall_Team *team, int n)
     cout << "2. Loc cac doi bong theo diem" << endl;
     cout << "Nhap lua chon: ";
     cin >> choice;
+    string country;
     switch (choice)
     {
     case 1:
-        string country;
         cout << "Nhap dia phuong can loc: ";
         fflush(stdin);
         getline(cin, country);
@@ -300,6 +304,9 @@ void filTer(footBall_Team *team, int n)
         for (int i = 0; i < count; i++)
             team[FIL_ARRAY[i]].showDetail();
         break;
+    case 2:
+        break;
+        // Loc cac doi bong co diem nhu nhau
     }
 }
 void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &numOfMatch)
