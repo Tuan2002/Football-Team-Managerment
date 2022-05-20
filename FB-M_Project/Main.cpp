@@ -287,6 +287,7 @@ void filTer(footBall_Team *team, int n)
     cout << "Nhap lua chon: ";
     cin >> choice;
     string country;
+    int point;
     switch (choice)
     {
     case 1:
