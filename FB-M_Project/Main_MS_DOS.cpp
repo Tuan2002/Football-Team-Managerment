@@ -160,6 +160,10 @@ public:
     {
         return country;
     }
+    int getPoint()
+    {
+        return point;
+    }
     void setPoint(int point)
     {
         this->point += point;
@@ -282,10 +286,11 @@ void filTer(footBall_Team *team, int n)
     cout << "2. Loc cac doi bong theo diem" << endl;
     cout << "Nhap lua chon: ";
     cin >> choice;
+    string country;
+    int point;
     switch (choice)
     {
     case 1:
-        string country;
         cout << "Nhap dia phuong can loc: ";
         fflush(stdin);
         getline(cin, country);
@@ -299,6 +304,9 @@ void filTer(footBall_Team *team, int n)
         cout << "Co (" << count << ") doi bong thuoc dia phuong: " << country << endl;
         for (int i = 0; i < count; i++)
             team[FIL_ARRAY[i]].showDetail();
+        break;
+    case 2:
+        // Loc theo diem tuong tu nhu case 1
         break;
     }
 }
@@ -397,7 +405,7 @@ void addTeam(footBall_Team *team, int &numOfTeam)
     numOfTeam++;
     cout << "Doi bong da duoc them vao danh sach" << endl;
 }
-void Delete(footBall_Team *team, int &numOfTeam)
+void removeTeam(footBall_Team *team, int &numOfTeam)
 {
     string border = "+--------------------------+---------------------+----------------+";
     cout << border << endl;
@@ -419,7 +427,7 @@ void Delete(footBall_Team *team, int &numOfTeam)
     numOfTeam--;
     cout << "Da xoa mot doi bong thanh cong !!";
 }
-void Delete_Match(footBall_Match *match, int &numOfMatch) 
+void Delete_Match(footBall_Match *match, int &numOfMatch)
 {
     string border = "+---------------------+------------+---------------------+---------------+---------------------+";
     cout << border << endl;
@@ -436,12 +444,12 @@ void Delete_Match(footBall_Match *match, int &numOfMatch)
     int selectMatch;
     cout << "Chon mot tran dau can xoa: ";
     cin >> selectMatch;
-    for(int i = selectMatch - 1; i < numOfMatch -1; i++)
+    for (int i = selectMatch - 1; i < numOfMatch - 1; i++)
     {
-        match[i] = match[i+1];
+        match[i] = match[i + 1];
     }
     numOfMatch--;
-    cout << "Da xoa tran dau thanh cong !!";
+    cout << "Da xoa tran dau thanh cong !!" << endl;
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
@@ -480,18 +488,20 @@ void titleBox()
 
 int main()
 {
-    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess;
-    sf::Sound welcome, selectOption, selectTeam, selectMatch, success;
+    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess, removeSuccess;
+    sf::Sound welcome, selectOption, selectTeam, selectMatch, success, remove;
     welc.loadFromFile("./Audio/Welcome.wav");
     slcOption.loadFromFile("./Audio/Selectoption.wav");
     slcTeam.loadFromFile("./Audio/Selectteam.wav");
     slcMatch.loadFromFile("./Audio/Selectmatch.wav");
     addSuccess.loadFromFile("./Audio/Addsuccess.wav");
+    removeSuccess.loadFromFile("./Audio/Remove.wav");
     welcome.setBuffer(welc);
     selectOption.setBuffer(slcOption);
     selectTeam.setBuffer(slcTeam);
     selectMatch.setBuffer(slcMatch);
     success.setBuffer(addSuccess);
+    remove.setBuffer(removeSuccess);
     system("cls");
     int numOfTeam, numOfMatch;
     footBall_Team *ListTeam = new footBall_Team[20];
@@ -669,7 +679,8 @@ int main()
                 titleBox();
                 break;
             case 2:
-                Delete(ListTeam, numOfTeam);
+                removeTeam(ListTeam, numOfTeam);
+                remove.play();
                 cout << "Bam phim bat ki de tro ve menu chinh... ";
                 fflush(stdin);
                 getchar();

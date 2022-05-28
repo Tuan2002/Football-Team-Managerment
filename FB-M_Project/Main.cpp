@@ -160,6 +160,10 @@ public:
     {
         return country;
     }
+    int getPoint()
+    {
+        return point;
+    }
     void setPoint(int point)
     {
         this->point += point;
@@ -282,10 +286,11 @@ void filTer(footBall_Team *team, int n)
     cout << "2. Loc cac doi bong theo diem" << endl;
     cout << "Nhap lua chon: ";
     cin >> choice;
+    string country;
+    int point;
     switch (choice)
     {
     case 1:
-        string country;
         cout << "Nhap dia phuong can loc: ";
         fflush(stdin);
         getline(cin, country);
@@ -300,6 +305,9 @@ void filTer(footBall_Team *team, int n)
         for (int i = 0; i < count; i++)
             team[FIL_ARRAY[i]].showDetail();
         break;
+    case 2:
+        break;
+        // Loc cac doi bong co diem nhu nhau
     }
 }
 void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &numOfMatch)
@@ -397,6 +405,28 @@ void addTeam(footBall_Team *team, int &numOfTeam)
     numOfTeam++;
     cout << "Doi bong da duoc them vao danh sach" << endl;
 }
+void removeTeam(footBall_Team *team, int &numOfTeam)
+{
+    string border = "+--------------------------+---------------------+----------------+";
+    cout << border << endl;
+    cout << "| " << left << setw(25) << "TEN DOI"
+         << "| " << setw(20) << "HUAN LUYEN VIEN"
+         << "| " << setw(14) << "DIA PHUONG"
+         << " |" << endl;
+    cout << border << endl;
+    for (int i = 0; i < numOfTeam; i++)
+        team[i].showInfo();
+    cout << border << endl;
+    int select;
+    cout << "Chon doi bong co trong danh sach can xoa: ";
+    cin >> select;
+    for (int i = select - 1; i < numOfTeam - 1; i++)
+    {
+        team[i] = team[i + 1];
+    }
+    numOfTeam--;
+    cout << "Da xoa mot doi bong thanh cong!";
+}
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
     string border = "+---------------------+------------+---------------------+---------------+---------------------+";
@@ -433,18 +463,20 @@ void titleBox()
 }
 int main()
 {
-    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess;
-    sf::Sound welcome, selectOption, selectTeam, selectMatch, success;
+    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess, removeSuccess;
+    sf::Sound welcome, selectOption, selectTeam, selectMatch, success, remove;
     welc.loadFromFile("./Audio/Welcome.wav");
     slcOption.loadFromFile("./Audio/Selectoption.wav");
     slcTeam.loadFromFile("./Audio/Selectteam.wav");
     slcMatch.loadFromFile("./Audio/Selectmatch.wav");
     addSuccess.loadFromFile("./Audio/Addsuccess.wav");
+    removeSuccess.loadFromFile("./Audio/Remove.wav");
     welcome.setBuffer(welc);
     selectOption.setBuffer(slcOption);
     selectTeam.setBuffer(slcTeam);
     selectMatch.setBuffer(slcMatch);
     success.setBuffer(addSuccess);
+    remove.setBuffer(removeSuccess);
     system("clear");
     int numOfTeam, numOfMatch;
     footBall_Team *ListTeam = new footBall_Team[20];
@@ -605,8 +637,8 @@ int main()
             int selection;
             selectOption.play();
             cout << "1. Them doi bong tu danh sach cho" << endl;
-            cout << "2. Them tran dau" << endl;
-            cout << "3. Xoa doi bong" << endl;
+            cout << "2. Xoa doi bong" << endl;
+            cout << "3. Them tran dau" << endl;
             cout << "4. Xoa tran dau" << endl;
             cout << "Nhap lua chon: ";
             cin >> selection;
@@ -615,6 +647,15 @@ int main()
             case 1:
                 addTeam(ListTeam, numOfTeam);
                 success.play();
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                fflush(stdin);
+                getchar();
+                system("clear");
+                titleBox();
+                break;
+            case 2:
+                removeTeam(ListTeam, numOfTeam);
+                remove.play();
                 cout << "Bam phim bat ki de tro ve menu chinh... ";
                 fflush(stdin);
                 getchar();
