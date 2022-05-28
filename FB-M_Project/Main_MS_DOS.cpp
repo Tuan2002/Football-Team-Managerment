@@ -419,9 +419,29 @@ void Delete(footBall_Team *team, int &numOfTeam)
     numOfTeam--;
     cout << "Da xoa mot doi bong thanh cong !!";
 }
-void Themtrandau(footBall_Match *match, int &numOfMatch) 
+void Delete_Match(footBall_Match *match, int &numOfMatch) 
 {
-    cout << "Tran dau dang dien ra";
+    string border = "+---------------------+------------+---------------------+---------------+---------------------+";
+    cout << border << endl;
+    cout << "| " << left << setw(20) << "SAN VAN DONG";
+    cout << "| " << setw(11) << "THOI GIAN";
+    cout << "| " << setw(20) << "TEN DOI BONG A";
+    cout << "| " << setw(14) << "    TI SO";
+    cout << "| " << setw(20) << "TEN DOI BONG B";
+    cout << "|" << endl;
+    cout << border << endl;
+    for (int i = 0; i < numOfMatch; i++)
+        match[i].showMatchInfo();
+    cout << border << endl;
+    int selectMatch;
+    cout << "Chon mot tran dau can xoa: ";
+    cin >> selectMatch;
+    for(int i = selectMatch - 1; i < numOfMatch -1; i++)
+    {
+        match[i] = match[i+1];
+    }
+    numOfMatch--;
+    cout << "Da xoa tran dau thanh cong !!";
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
@@ -650,6 +670,14 @@ int main()
                 break;
             case 2:
                 Delete(ListTeam, numOfTeam);
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                fflush(stdin);
+                getchar();
+                system("cls");
+                titleBox();
+                break;
+            case 4:
+                Delete_Match(ListMatch, numOfMatch);
                 cout << "Bam phim bat ki de tro ve menu chinh... ";
                 fflush(stdin);
                 getchar();
