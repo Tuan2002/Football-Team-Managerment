@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <unistd.h>
 #include <windows.h>
 #include "SFML/Audio.hpp"
 using namespace std;
@@ -180,6 +181,127 @@ public:
     {
         this->drawMatch += drawMatch;
     }
+    bool isPlayerExist(string name)
+    {
+        for (int i = 0; i < numOfPlayer; i++)
+            if (member[i].name == name)
+                return true;
+        return false;
+    }
+    footBall_Player searchPlayer(string name)
+    {
+        for (int i = 0; i < numOfPlayer; i++)
+        {
+            if (member[i].name == name)
+                return member[i];
+        }
+        return footBall_Player();
+    }
+    void changeInfoPllayer()
+    {
+        string border1 = "+--------------------------+------+------------+-----------+-----+-----+-----------+";
+        cout << border1 << endl;
+        cout << "| " << left << setw(25) << "Ho va Ten";
+        cout << "| " << left << setw(5) << "CCCD";
+        cout << "| " << left << setw(11) << "Ngay Sinh";
+        cout << "| " << left << setw(10) << "Vi Tri";
+        cout << "| " << left << setw(4) << "CAN";
+        cout << "| " << left << setw(4) << "CHC";
+        cout << "| " << left << setw(10) << "Quoc Tich";
+        cout << "|" << endl;
+        cout << border1 << endl;
+        for (int i = 0; i < numOfPlayer; i++)
+        {
+            member[i].showMemberInfo();
+        }
+        cout << border1 << endl;
+        cout << "Chon cau thu can thay doi thong tin: ";
+        int beSelected;
+        cin >> beSelected;
+        system("cls");
+        cout << "1. Thay doi ten cau thu \n";
+        cout << "2. Thay doi ID cau thu \n";
+        cout << "3. Thay doi vi tri cau thu \n";
+        cout << "4. Thay doi can nang cau thu \n";
+        cout << "5. Thay doi chieu cao cau thu \n";
+        cout << "6. Thay doi quoc tich cau thu \n";
+        cout << "7. Thay doi ngay sinh cau thu \n";
+        cout << "Lua chon: ";
+        int select;
+        cin >> select;
+        system("cls");
+        while (select <= 7)
+        {
+            if (select == 1)
+            {
+                string name;
+                cout << "Nhap ten moi: ";
+                fflush(stdin);
+                getline(cin, name);
+                member[beSelected - 1].name = name;
+                cout << "Thay doi thanh cong!" << endl;
+                break;
+            }
+            if (select == 2)
+            {
+                string id;
+                cout << "Nhap ID moi: ";
+                fflush(stdin);
+                getline(cin, id);
+                member[beSelected - 1].id = id;
+                cout << "Thay doi thanh cong!" << endl;
+                break;
+            }
+            if (select == 3)
+            {
+                string locator;
+                cout << "Nhap vi tri moi: ";
+                fflush(stdin);
+                getline(cin, locator);
+                member[beSelected - 1].locator = locator;
+                cout << "Thay doi thanh cong!" << endl;
+                break;
+            }
+            if (select == 4)
+            {
+                int weight;
+                cout << "Nhap can nang moi: ";
+                cin >> weight;
+                member[beSelected - 1].weight = weight;
+                cout << "Thay doi thanh cong!" << endl;
+                break;
+            }
+            if (select == 5)
+            {
+                int height;
+                cout << "Nhap chieu cao moi: ";
+                cin >> height;
+                member[beSelected - 1].height = height;
+                cout << "Thay doi thanh cong!" << endl;
+                break;
+            }
+            if (select == 6)
+            {
+                string nation;
+                cout << "Nhap quoc tich moi: ";
+                fflush(stdin);
+                getline(cin, nation);
+                member[beSelected - 1].nationaly = nation;
+                cout << "Thay doi thanh cong!" << endl;
+                break;
+            }
+            if (select == 7)
+            {
+                string birth;
+                cout << "Nhap ngay sinh moi: ";
+                fflush(stdin);
+                getline(cin, birth);
+                member[beSelected - 1].birthDay = birth;
+                cout << "Thay doi thanh cong!" << endl;
+                break;
+            }
+        }
+    }
     footBall_Team(footBall_Team &copy)
     {
         this->teamName = copy.teamName;
@@ -306,8 +428,8 @@ void filTer(footBall_Team *team, int n)
             team[FIL_ARRAY[i]].showDetail();
         break;
     case 2:
-        // Loc theo diem tuong tu nhu case 1
         break;
+        // Loc cac doi bong co diem nhu nhau
     }
 }
 void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &numOfMatch)
@@ -425,7 +547,7 @@ void removeTeam(footBall_Team *team, int &numOfTeam)
         team[i] = team[i + 1];
     }
     numOfTeam--;
-    cout << "Da xoa mot doi bong thanh cong !!";
+    cout << "Da xoa mot doi bong thanh cong!\n";
 }
 void Delete_Match(footBall_Match *match, int &numOfMatch)
 {
@@ -450,6 +572,62 @@ void Delete_Match(footBall_Match *match, int &numOfMatch)
     }
     numOfMatch--;
     cout << "Da xoa tran dau thanh cong !!" << endl;
+}
+// Phần tìm kiếm cầu thủ
+void searchMember(footBall_Team *team, int numOfTeam)
+{
+    footBall_Player *searchResult = new footBall_Player[10];
+    string name;
+    cout << "Nhap ten can thu can tim: ";
+    fflush(stdin);
+    getline(cin, name);
+    int count = 0;
+    for (int i = 0; i < numOfTeam; i++)
+        if (team[i].isPlayerExist(name) == true)
+        {
+            searchResult[count] = team[i].searchPlayer(name);
+            count++;
+        }
+    string border1 = "+--------------------------+------+------------+-----------+-----+-----+-----------+";
+    if (count > 0)
+    {
+        cout << border1 << endl;
+        cout << "| " << left << setw(25) << "Ho va Ten";
+        cout << "| " << left << setw(5) << "CCCD";
+        cout << "| " << left << setw(11) << "Ngay Sinh";
+        cout << "| " << left << setw(10) << "Vi Tri";
+        cout << "| " << left << setw(4) << "CAN";
+        cout << "| " << left << setw(4) << "CHC";
+        cout << "| " << left << setw(10) << "Quoc Tich";
+        cout << "|" << endl;
+        cout << border1 << endl;
+        for (int i = 0; i < count; i++)
+            searchResult[i].showMemberInfo();
+        cout << border1 << endl;
+    }
+    else
+    {
+        cout << "Khong tim thay nguoi nao co ten: " << name << endl;
+    }
+}
+// Chinh sua thong tin cua cau thu
+void ChangeInfoMember(footBall_Team *team, int numOfTeam)
+{
+    system("cls");
+    string border = "+--------------------------+---------------------+----------------+";
+    cout << border << endl;
+    cout << "| " << left << setw(25) << "TEN DOI"
+         << "| " << setw(20) << "HUAN LUYEN VIEN"
+         << "| " << setw(14) << "DIA PHUONG"
+         << " |" << endl;
+    cout << border << endl;
+    for (int i = 0; i < numOfTeam; i++)
+        team[i].showInfo();
+    cout << border << endl;
+    int select;
+    cout << "Chon doi bong: ";
+    cin >> select;
+    team[select - 1].changeInfoPllayer();
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
@@ -485,7 +663,6 @@ void titleBox()
     cout << border1 << endl;
     cout << border0 << endl;
 }
-
 int main()
 {
     sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess, removeSuccess;
@@ -511,15 +688,16 @@ int main()
     int choice;
     welcome.play();
     titleBox();
-    Sleep(3000);
-    while (choice != 6)
+    sleep(3);
+    while (choice != 7)
     {
         cout << "1. Xem thong tin cac doi bong" << endl;
         cout << "2. Xem thong tin cac tran dau" << endl;
         cout << "3. Thong ke diem" << endl;
         cout << "4. Loc thong tin" << endl;
         cout << "5. Chinh sua du lieu" << endl;
-        cout << "6. Thoat chuong trinh" << endl;
+        cout << "6. Tim kiem cau thu" << endl;
+        cout << "7. Thoat chuong trinh" << endl;
         cout << "Nhap lua chon: ";
         selectOption.play();
         cin >> choice;
@@ -665,6 +843,7 @@ int main()
             cout << "2. Xoa doi bong" << endl;
             cout << "3. Them tran dau" << endl;
             cout << "4. Xoa tran dau" << endl;
+            cout << "5. Chinh sua thong tin cau thu" << endl;
             cout << "Nhap lua chon: ";
             cin >> selection;
             switch (selection)
@@ -695,7 +874,30 @@ int main()
                 system("cls");
                 titleBox();
                 break;
+            case 5:
+                ChangeInfoMember(ListTeam, numOfTeam);
+                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                fflush(stdin);
+                getchar();
+                system("cls");
+                titleBox();
+                break;
             }
+            break;
+        }
+        case 6:
+        {
+            searchMember(ListTeam, numOfTeam);
+            cout << "Bam phim bat ki de tro ve menu chinh... ";
+            fflush(stdin);
+            getchar();
+            system("cls");
+            titleBox();
+            break;
+        }
+        case 7:
+        {
+            break;
         }
         }
     }
