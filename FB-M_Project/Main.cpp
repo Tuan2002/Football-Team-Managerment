@@ -476,7 +476,7 @@ void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
     for (int i = 0; i < n; i++)
         if (team[i].getTeamName() == name1)
             team[i].showDetail();
-    cout << "Bam phim bat ki de tiep tuc xem... ";
+    cout << "Bam phim ENTER de tiep tuc xem ... ";
     fflush(stdin);
     getchar();
     system("clear");
@@ -721,7 +721,7 @@ int main()
             cin >> select;
             system("clear");
             ListTeam[select - 1].showDetail();
-            cout << "Bam phim bat ki de tro ve menu chinh... ";
+            cout << "Bam ENTER de quay ve man hinh chinh...";
             fflush(stdin);
             getchar();
             system("clear");
@@ -750,7 +750,7 @@ int main()
                 int choice;
                 cin >> choice;
                 showTeamInfo(ListTeam, numOfTeam, ListMatch[choice - 1].getNameTeam1(), ListMatch[choice - 1].getNameTeam2());
-                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
                 system("clear");
@@ -783,7 +783,7 @@ int main()
                         ListTeam[i].showPoint();
                 }
                 cout << border << endl;
-                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
                 system("clear");
@@ -815,7 +815,7 @@ int main()
             for (int i = 0; i < numOfTeam; i++)
                 ListTeam[i].showPoint();
             cout << border << endl;
-            cout << "Bam phim bat ki de tro ve menu chinh... ";
+            cout << "Bam ENTER de quay ve man hinh chinh...";
             fflush(stdin);
             getchar();
             system("clear");
@@ -826,7 +826,7 @@ int main()
         {
             system("clear");
             filTer(ListTeam, numOfTeam);
-            cout << "Bam phim bat ki de tro ve menu chinh... ";
+            cout << "Bam ENTER de quay ve man hinh chinh...";
             fflush(stdin);
             getchar();
             system("clear");
@@ -850,7 +850,7 @@ int main()
             case 1:
                 addTeam(ListTeam, numOfTeam);
                 success.play();
-                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
                 system("clear");
@@ -859,7 +859,7 @@ int main()
             case 2:
                 removeTeam(ListTeam, numOfTeam);
                 remove.play();
-                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
                 system("clear");
@@ -867,7 +867,7 @@ int main()
                 break;
             case 4:
                 Delete_Match(ListMatch, numOfMatch);
-                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
                 system("clear");
@@ -875,7 +875,7 @@ int main()
                 break;
             case 5:
                 ChangeInfoMember(ListTeam, numOfTeam);
-                cout << "Bam phim bat ki de tro ve menu chinh... ";
+                cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
                 system("clear");
@@ -887,7 +887,7 @@ int main()
         case 6:
         {
             searchMember(ListTeam, numOfTeam);
-            cout << "Bam phim bat ki de tro ve menu chinh... ";
+            cout << "Bam ENTER de quay ve man hinh chinh...";
             fflush(stdin);
             getchar();
             system("clear");
