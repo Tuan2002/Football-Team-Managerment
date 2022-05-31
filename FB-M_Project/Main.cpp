@@ -662,22 +662,45 @@ void titleBox()
     cout << border1 << endl;
     cout << border0 << endl;
 }
+void aboutUS()
+{
+    string border0 = "*********************************************";
+    string border1 = "*                                           *";
+    string border3 = "*             VINH UNIVERSITY               *";
+    string border4 = "*    FOOTBALL PLAYER MANAGERMENT PROGRAM    *";
+    string border6 = "*           Developed by Team 5             *";
+    string border7 = "*          Supported by Kim Oanh            *";
+    cout.setf(ios::right, ios::adjustfield);
+    cout.width(20);
+    cout << border0 << endl;
+    cout << border1 << endl;
+    cout << border3 << endl;
+    cout << border4 << endl;
+    cout << border6 << endl;
+    cout << border7 << endl;
+    cout << border1 << endl;
+    cout << border0 << endl;
+    cout << "Nhom 5: " << endl;
+    cout << "Bui Phuong - Dinh Tuan - Duy Nguyen" << endl;
+}
 int main()
 {
-    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, addSuccess, removeSuccess;
-    sf::Sound welcome, selectOption, selectTeam, selectMatch, success, remove;
+    // Audio Configruation
+    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, about;
+    sf::Sound welcome, selectOption, selectTeam, selectMatch, aboutUS;
     welc.loadFromFile("./Audio/Welcome.wav");
     slcOption.loadFromFile("./Audio/Selectoption.wav");
     slcTeam.loadFromFile("./Audio/Selectteam.wav");
     slcMatch.loadFromFile("./Audio/Selectmatch.wav");
-    addSuccess.loadFromFile("./Audio/Addsuccess.wav");
-    removeSuccess.loadFromFile("./Audio/Remove.wav");
+    about.loadFromFile("./Audio/About.wav");
     welcome.setBuffer(welc);
     selectOption.setBuffer(slcOption);
     selectTeam.setBuffer(slcTeam);
     selectMatch.setBuffer(slcMatch);
-    success.setBuffer(addSuccess);
-    remove.setBuffer(removeSuccess);
+    aboutUS.setBuffer(about);
+
+    // Menu Configruation
+
     system("clear");
     int numOfTeam, numOfMatch;
     footBall_Team *ListTeam = new footBall_Team[20];
@@ -687,8 +710,8 @@ int main()
     int choice;
     welcome.play();
     titleBox();
-    sleep(3);
-    while (choice != 7)
+    sleep(4);
+    while (choice != 8)
     {
         cout << "1. Xem thong tin cac doi bong" << endl;
         cout << "2. Xem thong tin cac tran dau" << endl;
@@ -696,7 +719,8 @@ int main()
         cout << "4. Loc thong tin" << endl;
         cout << "5. Chinh sua du lieu" << endl;
         cout << "6. Tim kiem cau thu" << endl;
-        cout << "7. Thoat chuong trinh" << endl;
+        cout << "7. Gioi thieu ve chung toi" << endl;
+        cout << "8. Thoat chuong trinh" << endl;
         cout << "Nhap lua chon: ";
         selectOption.play();
         cin >> choice;
@@ -849,7 +873,6 @@ int main()
             {
             case 1:
                 addTeam(ListTeam, numOfTeam);
-                success.play();
                 cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
@@ -858,7 +881,6 @@ int main()
                 break;
             case 2:
                 removeTeam(ListTeam, numOfTeam);
-                remove.play();
                 cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
@@ -895,6 +917,19 @@ int main()
             break;
         }
         case 7:
+        {
+            system("clear");
+            ::aboutUS();
+            aboutUS.play();
+            cout << "Bam ENTER de quay ve man hinh chinh...";
+            fflush(stdin);
+            getchar();
+            aboutUS.stop();
+            system("clear");
+            titleBox();
+            break;
+        }
+        case 8:
         {
             break;
         }
