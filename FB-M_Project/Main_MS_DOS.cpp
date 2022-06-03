@@ -427,6 +427,7 @@ void filTer(footBall_Team *team, int n)
             team[FIL_ARRAY[i]].showDetail();
         break;
     case 2:
+
         cout << "Nhap so diem can loc: ";
         cin >> point;
         for (int i = 0; i < n; i++)
