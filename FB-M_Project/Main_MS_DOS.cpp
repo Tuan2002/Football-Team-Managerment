@@ -684,7 +684,7 @@ void aboutUS()
     string border6 = "*      Bui Truong Phuong                           *";
     string border7 = "*      Duong Dinh Tuan                             *";
     string border8 = "*      Email:                                      *";
-    string border9 = "*      contact.footballteammanage@outlook.com      *";
+    string border9 = "*      contact.footballteammanager@outlook.com      *";
     string border10 = "*              HAVE A GOOD EXPERIENCE              *";
     string border11 = "*                    THANK YOU                     *";
     string border12 = "*                                                  *";
