@@ -427,7 +427,6 @@ void filTer(footBall_Team *team, int n)
             team[FIL_ARRAY[i]].showDetail();
         break;
     case 2:
-
         cout << "Nhap so diem can loc: ";
         cin >> point;
         for (int i = 0; i < n; i++)
@@ -441,7 +440,6 @@ void filTer(footBall_Team *team, int n)
         for (int i = 0; i < count; i++)
             team[FIL_ARRAY[i]].showDetail();
         break;
-        // Loc cac doi bong co diem nhu nhau
     }
 }
 void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &numOfMatch)

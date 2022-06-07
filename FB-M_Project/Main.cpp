@@ -427,8 +427,19 @@ void filTer(footBall_Team *team, int n)
             team[FIL_ARRAY[i]].showDetail();
         break;
     case 2:
+        cout << "Nhap so diem can loc: ";
+        cin >> point;
+        for (int i = 0; i < n; i++)
+            if (team[i].getPoint() == point)
+            {
+                FIL_ARRAY[count] = i;
+                count++;
+            }
+        system("cls");
+        cout << "Co (" << count << ") doi bong co diem: " << point << endl;
+        for (int i = 0; i < count; i++)
+            team[FIL_ARRAY[i]].showDetail();
         break;
-        // Loc cac doi bong co diem nhu nhau
     }
 }
 void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &numOfMatch)
@@ -664,24 +675,42 @@ void titleBox()
 }
 void aboutUS()
 {
-    string border0 = "*********************************************";
-    string border1 = "*                                           *";
-    string border3 = "*             VINH UNIVERSITY               *";
-    string border4 = "*    FOOTBALL PLAYER MANAGERMENT PROGRAM    *";
-    string border6 = "*           Developed by Team 5             *";
-    string border7 = "*          Supported by Kim Oanh            *";
+
+    string border0 = "****************************************************";
+    string border1 = "*      TEAM 5:                                     *";
+    string border2 = "*      Leader:                                     *";
+    string border3 = "*      Nguyen Ngoc Anh Tuan                        *";
+    string border4 = "*      Members:                                    *";
+    string border5 = "*      Nguyen Duy Nguyen                           *";
+    string border6 = "*      Bui Truong Phuong                           *";
+    string border7 = "*      Duong Dinh Tuan                             *";
+    string border8 = "*      Email:                                      *";
+    string border9 = "*      contact.footballteammanage@outlook.com      *";
+    string border10 = "*              HAVE A GOOD EXPERIENCE              *";
+    string border11 = "*                    THANK YOU                     *";
+    string border12 = "*                                                  *";
     cout.setf(ios::right, ios::adjustfield);
     cout.width(20);
     cout << border0 << endl;
+    cout << border12 << endl;
     cout << border1 << endl;
+    cout << border12 << endl;
+    cout << border2 << endl;
     cout << border3 << endl;
     cout << border4 << endl;
+    cout << border5 << endl;
     cout << border6 << endl;
     cout << border7 << endl;
-    cout << border1 << endl;
+    cout << border12 << endl;
+    cout << border8 << endl;
+    cout << border9 << endl;
+    cout << border12 << endl;
     cout << border0 << endl;
-    cout << "Nhom 5: " << endl;
-    cout << "Bui Phuong - Dinh Tuan - Duy Nguyen" << endl;
+    cout << border12 << endl;
+    cout << border10 << endl;
+    cout << border11 << endl;
+    cout << border12 << endl;
+    cout << border0 << endl;
 }
 int main()
 {
