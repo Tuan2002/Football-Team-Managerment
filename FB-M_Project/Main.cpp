@@ -923,6 +923,8 @@ int main()
                 system("clear");
                 titleBox();
                 break;
+            case 3:
+                break;
             case 5:
                 ChangeInfoMember(ListTeam, numOfTeam);
                 cout << "Bam ENTER de quay ve man hinh chinh...";
