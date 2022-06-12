@@ -1,0 +1,27 @@
+
+                                                                                BANG TONG HOP THONG TIN DOI BONG                                                                                 
+
++---------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
+|      STT      |           1           |           2           |           3           |           4           |           5           |           6           |           7           |
++---------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
+|    TEN DOI    |   Song Lam Nghe An    |      Ha Noi T&T       |   Hoang Anh Gia Lai   |      SHB Da Nang      |    BKM Binh Duong     |    Than Quang Ninh    |       Nam Dinh        |
++---------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
+|      HLV      |    Duong Tuan Anh     |    Le Hoang Khang     |     Dang Duy Hung     |    Hoang Ngoc Dat     |   Truong Nhat Long    |    Nguyen Huu Hung    |     Le Hoang Khai     |
++---------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
+|   DIA PHUONG  |        Nghe An        |        Ha Noi         |        Gia Lai        |        Da Nang        |      Binh Duong       |      Quang Ninh       |       Nam Dinh        |
++---------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
+|   TONG DIEM   |           7           |           6           |           0           |           1           |           2           |           3           |           0           |
++---------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
+|   DS CAU THU  | Nguyen Van Viet       | Nguyen Tuan Anh       | Duong Van Loi         | Phan Van Long         | Nguyen Son Hai        | Dao Duy Khanh         | Nguyen Son Hai        |
+|               | Pham The Nhat         | Tran Quang Toan       | Lo Van Son            | Hoang Minh Tam        | Nguyen Hung Thien Duc | Phung Kim Truong      | Nguyen Hung Thien     |
+|               | Que Ngoc Hai          | Dang Van Truong       | Tran Huu Dung         | Nguyen Thanh Binh     | Nguyen Thanh Thao     | Nguyen Thanh Hien     | Nguyen Thanh Thao     |
+|               | Bui Dinh Chau         | Dao Duy Anh           | Luong Xuon Truong     | Pham Van Huu          | Uong Ngoc Tien        | Nghiem Xuan Ty        | Uong Ngoc Tai         |
+|               | Hoang Van Khanh       | Truong Nhat Huy       | Nguyen Phong Hong Duy | Dang Tuan Nghia       | Nguyen Trong Huy      | Hoang Tuan Anh        | Nguyen Trong Nguyen   |
+|               | Ho Sy Sam             | Nguyen Duy Hoang      | Nguyen Van Toan       | Pham Dinh Duy         | Nguyen Thanh Long     | Phan Minh Thanh       | Nguyen Thanh Trung    |
+|               | Pham Xuan Manh        | Ttran Quoc Anh        | Nguyen Cung Phuong    | Lieu Quang Vinh       | Nguyen Anh Tai        | Dang Quang Huy        | Nguyen Anh Tai        |
+|               | Ho Phuc Tinh          | Bui Tuan Tai          | Nguyen Tuan Anh       | Luong Duy Cuong       | Doan Tuan Canh        | Nguyen Huu Khoi       | Doan Tuan Anh         |
+|               | Nguyen Trong Hoang    | Nguyen Nhat Minh      | Tran Bao Toan         | Nguyen Phi Hoang      | Bui Vi Hao            | Truong Nhat Huy       | Bui Vi Hoang          |
+|               | Nguyen Van Viet       | Pham Van Hai          | Lo Huy Kiet           | Nguyen Cung Nhat      | Tran Duy Khanh        | Nguyen Van Viet       | Tran Duy Hung         |
+|               | Tran Dinh Tien        | Nguyen Hoang Dung     | Nguyen Duc Viet       | Nguyen Trong Nam      | Ho Sy Giap            | Gustavo Santos        | Ho Sy Hieu            |
++---------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
+                                                                               Ngay Tong Hop: 12/6/2022 - 15:57:32                                                                               
