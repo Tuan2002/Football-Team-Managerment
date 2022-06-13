@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "iosfwd": "cpp",
+    "ostream": "cpp"
+  },
+  "code-runner.runInTerminal": true,
+  "code-runner.executorMap": {
+    "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+    "cpp": "cd $dir && g++ $fileName -I $dir -o $fileNameWithoutExt -L $dir$lib -lsfml-system -lsfml-audio && $dir$fileNameWithoutExt",
+  }
+}

@@ -8,14 +8,14 @@
 using namespace std;
 // Global Variables
 bool savedStatus = true;
-bool isAudio = false;
+bool isAudioOn = true;
 // Class Declarations
 class footBall_Player;
 class footBall_Team;
 class footBall_Match;
 // Function Prototypes
 void clearSystemLog();
-string center(int width, const string &str);
+string centerAlign(int width, const string &str);
 void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int numOfTeam);
 void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);
 void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &numOfMatch);
@@ -25,8 +25,10 @@ void filter(footBall_Team *team, int n);
 void showTeamInfo(footBall_Team *team, int n, string name1, string name2);
 void addTeam(footBall_Team *team, int &numOfTeam);
 void removeTeam(footBall_Team *team, int &numOfTeam);
+void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch);
 void deleteMatch(footBall_Match *match, int &numOfMatch);
 void searchMember(footBall_Team *team, int numOfTeam);
+void searchTeam(footBall_Team *team, int numOfTeam);
 void scoreBoard(footBall_Match *match, int numOfMatch);
 void titleBox();
 void aboutUS();
@@ -96,6 +98,7 @@ public:
     footBall_Match();
     footBall_Match(string stadium, string time, string team1_Name, string team2_Name, int score1, int score2);
     void showMatchInfo();
+    void exportMatchInfo(ofstream &fout);
     string getNameTeam1();
     string getNameTeam2();
     friend void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);
@@ -451,6 +454,15 @@ void footBall_Match::showMatchInfo()
     cout << " | " << left << setw(20) << team2Name;
     cout << "|" << endl;
 }
+void footBall_Match::exportMatchInfo(ofstream &fout)
+{
+    fout << stadium << ";"
+         << team1Name << ";"
+         << team2Name << ";"
+         << time << ";"
+         << score1 << ";"
+         << score2;
+}
 string footBall_Match::getNameTeam1()
 {
     return team1Name;
@@ -468,7 +480,7 @@ void clearSystemLog()
 }
 
 // Fomatting String Align to Center
-string center(int width, const string &str)
+string centerAlign(int width, const string &str)
 {
     int len = str.length();
     if (width < len)
@@ -582,34 +594,34 @@ void exportFile(footBall_Team *team, int numOfTeam)
     int width = 18 + 25 * numOfTeam;
     fout.open("./Export/Bang Tong Hop.txt");
     fout << endl
-         << center(width, title) << endl
+         << centerAlign(width, title) << endl
          << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam);
     fout << tilte1;
     for (int i = 0; i < numOfTeam; i++)
     {
-        fout << center(23, to_string(i + 1)) << "|";
+        fout << centerAlign(23, to_string(i + 1)) << "|";
     }
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam);
     fout << title2;
     for (int i = 0; i < numOfTeam; i++)
-        fout << center(23, team[i].getTeamName()) << "|";
+        fout << centerAlign(23, team[i].getTeamName()) << "|";
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam);
     fout << title3;
     for (int i = 0; i < numOfTeam; i++)
-        fout << center(23, team[i].getCoach()) << "|";
+        fout << centerAlign(23, team[i].getCoach()) << "|";
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam);
     fout << title4;
     for (int i = 0; i < numOfTeam; i++)
-        fout << center(23, team[i].getCountry()) << "|";
+        fout << centerAlign(23, team[i].getCountry()) << "|";
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam);
     fout << title5;
     for (int i = 0; i < numOfTeam; i++)
-        fout << center(23, to_string(team[i].getPoint())) << "|";
+        fout << centerAlign(23, to_string(team[i].getPoint())) << "|";
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam);
     fout << title6;
@@ -627,11 +639,21 @@ void exportFile(footBall_Team *team, int numOfTeam)
     const time_t currentTime = time(0);
     tm *localTime = localtime(&currentTime);
     string modifiedDay = "Ngay Tong Hop: " + to_string(localTime->tm_mday) + "/" + to_string(localTime->tm_mon + 1) + "/" + to_string(localTime->tm_year + 1900) + " - " + to_string(localTime->tm_hour) + ":" + to_string(localTime->tm_min) + ":" + to_string(localTime->tm_sec);
-    fout << center(width, modifiedDay) << endl;
+    fout << centerAlign(width, modifiedDay) << endl;
 }
-void saveModified(footBall_Team *team, int numOfTeam)
+void saveModified(footBall_Team *team, int numOfTeam, footBall_Match *match, int numOfMatch)
 {
     ofstream fout;
+    fout.open("./DS Tran Dau.csv");
+    fout << "SAN VAN DONG;DOI A;DOI B;THOI GIAN;SBT DOI A;SBT DOI B" << endl;
+    for (int i = 0; i < numOfMatch; i++)
+    {
+        match[i].exportMatchInfo(fout);
+        if (i == numOfMatch - 1)
+            break;
+        fout << endl;
+    }
+    fout.close();
     fout.open("./DS Doi Bong.csv");
     fout << "TEN DOI BONG;HUAN LUYEN VIEN;DIA PHUONG\n";
     for (int i = 0; i < numOfTeam; i++)
@@ -649,14 +671,17 @@ void saveModified(footBall_Team *team, int numOfTeam)
     for (int i = 0; i < numOfTeam; i++)
         team[i].saveChange();
 }
-void filter(footBall_Team *team, int n)
+void filter(footBall_Team *team, int n, sf::Sound options)
 {
     int FILT_ARRAY[50];
     int count = 0;
     int choice;
+    if (isAudioOn == true)
+        options.play();
     cout << "1. Loc cac doi bong theo dia phuong" << endl;
     cout << "2. Loc cac doi bong theo diem" << endl;
     cout << "3. Sap xep cac doi theo diem tu cao den thap" << endl;
+    cout << "4. Tro ve menu" << endl;
     cout << "Nhap lua chon: ";
     cin >> choice;
     string country;
@@ -674,9 +699,14 @@ void filter(footBall_Team *team, int n)
                 count++;
             }
         clearSystemLog();
-        cout << "Co (" << count << ") doi bong thuoc dia phuong: " << country << endl;
-        for (int i = 0; i < count; i++)
-            team[FILT_ARRAY[i]].showDetail();
+        if (count == 0)
+            cout << "Khong co doi bong nao nam trong dia phuong nay" << endl;
+        else
+        {
+            cout << "Co (" << count << ") doi bong thuoc dia phuong: " << country << endl;
+            for (int i = 0; i < count; i++)
+                team[FILT_ARRAY[i]].showDetail();
+        }
         break;
     case 2:
         cout << "Nhap so diem can loc: ";
@@ -687,12 +717,18 @@ void filter(footBall_Team *team, int n)
                 FILT_ARRAY[count] = i;
                 count++;
             }
-        system("cls");
-        cout << "Co (" << count << ") doi bong co diem: " << point << endl;
-        for (int i = 0; i < count; i++)
-            team[FILT_ARRAY[i]].showDetail();
+        clearSystemLog();
+        if (count == 0)
+            cout << "Khong co doi bong nao co diem: " << point << endl;
+        else
+        {
+            cout << "Co (" << count << ") doi bong co diem: " << point << endl;
+            for (int i = 0; i < count; i++)
+                team[FILT_ARRAY[i]].showDetail();
+        }
         break;
     case 3:
+
         footBall_Team temp;
         for (int i = 0; i < n; i++)
             for (int j = i + 1; j < n; j++)
@@ -707,6 +743,7 @@ void filter(footBall_Team *team, int n)
         cout << "Danh sach doi bong sau khi sap xep: " << endl;
         for (int i = 0; i < n; i++)
             team[i].showInfo();
+        break;
     }
 }
 void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
@@ -883,7 +920,32 @@ void searchMember(footBall_Team *team, int numOfTeam)
     }
     else
     {
-        cout << "Khong tim thay nguoi nao co ten: " << name << endl;
+        cout << "Khong tim thay cau thu nao co ten: " << name << endl;
+    }
+}
+void searchTeam(footBall_Team *team, int numOfTeam)
+{
+    footBall_Team searchResult;
+    string name;
+    bool isExist = false;
+    cout << "Nhap ten doi can tim: ";
+    fflush(stdin);
+    getline(cin, name);
+    for (int i = 0; i < numOfTeam; i++)
+        if (team[i].getTeamName() == name)
+        {
+            searchResult = team[i];
+            isExist = true;
+            break;
+        }
+    if (isExist == true)
+    {
+        cout << "Ket qua tim kiem: " << endl;
+        searchResult.showDetail();
+    }
+    else
+    {
+        cout << "Khong tim thay doi co ten: " << name << endl;
     }
 }
 void changMemberInfo(footBall_Team *team, int numOfTeam)
@@ -988,7 +1050,7 @@ int main()
 
     sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, about;
     sf::Sound welcome, selectOption, selectTeam, selectMatch, aboutUS;
-    if (isAudio == true)
+    if (isAudioOn == true)
     {
         welc.loadFromFile("./Audio/Welcome.wav");
         slcOption.loadFromFile("./Audio/Selectoption.wav");
@@ -1006,25 +1068,25 @@ int main()
     clearSystemLog();
     int choice;
     titleBox();
-    if (isAudio == true)
+    if (isAudioOn == true)
     {
         welcome.play();
         sleep(4);
     }
     while (choice != 9)
     {
-        cout << "0. Xuat bang tong hop" << endl;
+        cout << "0. Xuat bang tong hop thong tin" << endl;
         cout << "1. Xem thong tin cac doi bong" << endl;
         cout << "2. Xem thong tin cac tran dau" << endl;
-        cout << "3. Thong ke diem" << endl;
-        cout << "4. Loc va sap xep thong tin" << endl;
+        cout << "3. Bang thong ke diem" << endl;
+        cout << "4. Loc va sap xep du lieu" << endl;
         cout << "5. Chinh sua du lieu" << endl;
-        cout << "6. Tim kiem cau thu" << endl;
+        cout << "6. Tim kiem thong tin" << endl;
         cout << "7. Luu du lieu" << endl;
         cout << "8. Gioi thieu ve chung toi" << endl;
         cout << "9. Thoat chuong trinh" << endl;
         cout << "Nhap lua chon: ";
-        if (isAudio == true)
+        if (isAudioOn == true)
             selectOption.play();
         cin >> choice;
         switch (choice)
@@ -1053,7 +1115,7 @@ int main()
                 ListTeam[i].showInfo();
             cout << border << endl;
             int select;
-            if (isAudio == true)
+            if (isAudioOn == true)
                 selectTeam.play();
             cout << "Chon doi bong can xem thong tin chi tiet: ";
             cin >> select;
@@ -1071,7 +1133,7 @@ int main()
             int selection;
             clearSystemLog();
             scoreBoard(ListMatch, numOfMatch);
-            if (isAudio == true)
+            if (isAudioOn == true)
                 selectOption.play();
             cout << "1. Xem thong tin chi tiet hai doi" << endl;
             cout << "2. Xem thong ke diem cua hai doi" << endl;
@@ -1084,7 +1146,7 @@ int main()
             {
                 clearSystemLog();
                 scoreBoard(ListMatch, numOfMatch);
-                if (isAudio == true)
+                if (isAudioOn == true)
                     selectMatch.play();
                 cout << "Chon tran dau: ";
                 int choice;
@@ -1101,7 +1163,7 @@ int main()
             {
                 clearSystemLog();
                 scoreBoard(ListMatch, numOfMatch);
-                if (isAudio == true)
+                if (isAudioOn == true)
                     selectMatch.play();
                 cout << "Chon tran dau: ";
                 int choice;
@@ -1166,7 +1228,7 @@ int main()
         case 4:
         {
             clearSystemLog();
-            filter(ListTeam, numOfTeam);
+            filter(ListTeam, numOfTeam, selectOption);
             cout << "Bam ENTER de quay ve man hinh chinh...";
             fflush(stdin);
             getchar();
@@ -1178,13 +1240,14 @@ int main()
         {
             clearSystemLog();
             int selection;
-            if (isAudio == true)
+            if (isAudioOn == true)
                 selectOption.play();
             cout << "1. Them doi bong tu danh sach cho" << endl;
             cout << "2. Xoa doi bong" << endl;
             cout << "3. Them tran dau" << endl;
             cout << "4. Xoa tran dau" << endl;
             cout << "5. Chinh sua thong tin cau thu" << endl;
+            cout << "6. Tro ve menu" << endl;
             cout << "Nhap lua chon: ";
             cin >> selection;
             switch (selection)
@@ -1231,15 +1294,45 @@ int main()
                 clearSystemLog();
                 titleBox();
                 break;
+            default:
+                clearSystemLog();
+                titleBox();
             }
             break;
         }
         case 6:
         {
-            searchMember(ListTeam, numOfTeam);
-            cout << "Bam ENTER de quay ve man hinh chinh...";
-            fflush(stdin);
-            getchar();
+            clearSystemLog();
+            int selection;
+            if (isAudioOn == true)
+                selectOption.play();
+            cout << "1. Tim kiem cau thu" << endl;
+            cout << "2. Tim kiem doi bong" << endl;
+            cout << "3. Tro ve menu" << endl;
+            cout << "Nhap lua chon: ";
+            cin >> selection;
+            switch (selection)
+            {
+            case 1:
+                clearSystemLog();
+                searchMember(ListTeam, numOfTeam);
+                cout << "Bam ENTER de quay ve man hinh chinh...";
+                fflush(stdin);
+                getchar();
+                clearSystemLog();
+                titleBox();
+                break;
+            case 2:
+                clearSystemLog();
+                searchTeam(ListTeam, numOfTeam);
+                cout << "Bam ENTER de quay ve man hinh chinh...";
+                fflush(stdin);
+                getchar();
+                clearSystemLog();
+                titleBox();
+                break;
+            }
+        default:
             clearSystemLog();
             titleBox();
             break;
@@ -1249,7 +1342,7 @@ int main()
             clearSystemLog();
             if (savedStatus == false)
             {
-                saveModified(ListTeam, numOfTeam);
+                saveModified(ListTeam, numOfTeam, ListMatch, numOfMatch);
                 cout << "Da luu du lieu thanh cong!" << endl;
                 savedStatus = true;
             }
@@ -1266,12 +1359,12 @@ int main()
         {
             clearSystemLog();
             ::aboutUS();
-            if (isAudio == true)
+            if (isAudioOn == true)
                 aboutUS.play();
             cout << "Bam ENTER de quay ve man hinh chinh...";
             fflush(stdin);
             getchar();
-            if (isAudio == true)
+            if (isAudioOn == true)
                 aboutUS.stop();
             clearSystemLog();
             titleBox();
@@ -1286,7 +1379,7 @@ int main()
                 cin >> choice;
                 if (choice == 'y' || choice == 'Y')
                 {
-                    saveModified(ListTeam, numOfTeam);
+                    saveModified(ListTeam, numOfTeam, ListMatch, numOfMatch);
                     cout << "Da luu du lieu thanh cong!" << endl;
                     savedStatus = true;
                 }
