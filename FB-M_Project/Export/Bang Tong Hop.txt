@@ -24,4 +24,4 @@
 |               | Nguyen Van Viet       | Pham Van Hai          | Lo Huy Kiet           | Nguyen Cung Nhat      | Tran Duy Khanh        | Nguyen Van Viet       |
 |               | Tran Dinh Tien        | Nguyen Hoang Dung     | Nguyen Duc Viet       | Nguyen Trong Nam      | Ho Sy Giap            | Gustavo Santos        |
 +---------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+-----------------------+
-                                                                  Ngay Tong Hop: 13/6/2022 - 11:14:25                                                                   
+                                                                   Ngay Tong Hop: 14/6/2022 - 20:54:7                                                                   

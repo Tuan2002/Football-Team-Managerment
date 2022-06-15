@@ -8,7 +8,7 @@
 using namespace std;
 // Global Variables
 bool savedStatus = true;
-bool isAudioOn = true;
+bool isAudioOn = false;
 // Class Declarations
 class footBall_Player;
 class footBall_Team;
@@ -740,9 +740,17 @@ void filter(footBall_Team *team, int n, sf::Sound options)
                 }
         savedStatus = false;
         clearSystemLog();
+        string border = "+--------------------------+---------------------+----------------+";
         cout << "Danh sach doi bong sau khi sap xep: " << endl;
+        cout << border << endl;
+        cout << "| " << left << setw(25) << "TEN DOI"
+             << "| " << setw(20) << "HUAN LUYEN VIEN"
+             << "| " << setw(14) << "DIA PHUONG"
+             << " |" << endl;
+        cout << border << endl;
         for (int i = 0; i < n; i++)
             team[i].showInfo();
+        cout << border << endl;
         break;
     }
 }
@@ -1011,7 +1019,7 @@ void aboutUS()
     string border6 = "*      Bui Truong Phuong                           *";
     string border7 = "*      Duong Dinh Tuan                             *";
     string border8 = "*      Email:                                      *";
-    string border9 = "*      contact.footballteammanager@outlook.com      *";
+    string border9 = "*      contact.footballteammanager@outlook.com     *";
     string border10 = "*              HAVE A GOOD EXPERIENCE              *";
     string border11 = "*                    THANK YOU                     *";
     string border12 = "*                                                  *";
