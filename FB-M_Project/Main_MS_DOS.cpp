@@ -18,13 +18,13 @@ void clearSystemLog();
 string centerAlign(int width, const string &str);
 void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int numOfTeam);
 void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);
-void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &numOfMatch);
+void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, footBall_Match *match, int &numOfMatch);
 void exportFile(footBall_Team *team, int numOfTeam);
-void saveModified(footBall_Team *team, int numOfTeam);
+void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *match, int numOfMatch);
 void filter(footBall_Team *team, int n);
 void showTeamInfo(footBall_Team *team, int n, string name1, string name2);
-void addTeam(footBall_Team *team, int &numOfTeam);
-void removeTeam(footBall_Team *team, int &numOfTeam);
+void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount);
+void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount);
 void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch);
 void deleteMatch(footBall_Match *match, int &numOfMatch);
 void searchMember(footBall_Team *team, int numOfTeam);
@@ -541,15 +541,15 @@ void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int n
                 }
             }
 }
-void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &numOfMatch)
+void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, footBall_Match *match, int &numOfMatch)
 {
     ifstream fin;
     fin.open("./DS Doi Bong.csv");
+    string teamName, country, coach, temp;
     int count = 0;
     fin.ignore(256, '\n');
     while (!fin.eof())
     {
-        string teamName, country, coach, temp;
         getline(fin, teamName, ';');
         getline(fin, coach, ';');
         getline(fin, temp, '\n');
@@ -561,11 +561,11 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &n
     fin.close();
     numOfTeam = count;
     fin.open("./DS Tran Dau.csv");
+    string stadium, time, team1_Name, team2_Name, score1, score2;
     count = 0;
     fin.ignore(256, '\n');
     while (!fin.eof())
     {
-        string stadium, time, team1_Name, team2_Name, score1, score2;
         getline(fin, stadium, ';');
         getline(fin, team1_Name, ';');
         getline(fin, team2_Name, ';');
@@ -577,6 +577,21 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Match *match, int &n
     }
     fin.close();
     numOfMatch = count;
+    fin.open("./Doi Bong Cho.csv");
+    fin.ignore(256, '\n');
+    count = 0;
+    while (!fin.eof())
+    {
+        getline(fin, teamName, ';');
+        getline(fin, coach, ';');
+        getline(fin, temp, '\n');
+        int possiton = temp.find('\r');
+        country = temp.substr(0, possiton);
+        pendingTeam[count] = footBall_Team(teamName, country, coach);
+        count++;
+    }
+    pendingTeamAmount = count;
+    fin.close();
 }
 void exportFile(footBall_Team *team, int numOfTeam)
 {
@@ -641,7 +656,7 @@ void exportFile(footBall_Team *team, int numOfTeam)
     string modifiedDay = "Ngay Tong Hop: " + to_string(localTime->tm_mday) + "/" + to_string(localTime->tm_mon + 1) + "/" + to_string(localTime->tm_year + 1900) + " - " + to_string(localTime->tm_hour) + ":" + to_string(localTime->tm_min) + ":" + to_string(localTime->tm_sec);
     fout << centerAlign(width, modifiedDay) << endl;
 }
-void saveModified(footBall_Team *team, int numOfTeam, footBall_Match *match, int numOfMatch)
+void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *match, int numOfMatch)
 {
     ofstream fout;
     fout.open("./DS Tran Dau.csv");
@@ -666,6 +681,20 @@ void saveModified(footBall_Team *team, int numOfTeam, footBall_Match *match, int
             break;
         }
         fout << team[i].getCountry() << endl;
+    }
+    fout.close();
+    fout.open("./Doi Bong Cho.csv");
+    fout << "TEN DOI BONG;HUAN LUYEN VIEN;DIA PHUONG\n";
+    for (int i = 0; i < pendingTeamAmount; i++)
+    {
+        fout << pendingTeam[i].getTeamName() << ";"
+             << pendingTeam[i].getCoach() << ";";
+        if (i == pendingTeamAmount - 1)
+        {
+            fout << pendingTeam[i].getCountry();
+            break;
+        }
+        fout << pendingTeam[i].getCountry() << endl;
     }
     fout.close();
     for (int i = 0; i < numOfTeam; i++)
@@ -770,28 +799,8 @@ void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
         if (team[i].getTeamName() == name2)
             team[i].showDetail();
 }
-void addTeam(footBall_Team *team, int &numOfTeam)
+void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount)
 {
-    footBall_Team *pendingTeam = new footBall_Team[20];
-    string teamName, country, coach;
-    int pendingTeamAmount = 0;
-    ifstream fin;
-    fin.open("./Doi Bong Cho.csv");
-    fin.ignore(256, '\n');
-    int count = 0;
-    while (!fin.eof())
-    {
-        string teamName, country, coach, temp;
-        getline(fin, teamName, ';');
-        getline(fin, coach, ';');
-        getline(fin, temp, '\n');
-        int possiton = temp.find('\r');
-        country = temp.substr(0, possiton);
-        pendingTeam[count] = footBall_Team(teamName, country, coach);
-        count++;
-    }
-    pendingTeamAmount = count;
-    fin.close();
     clearSystemLog();
     string border = "+--------------------------+---------------------+----------------+";
     cout << border << endl;
@@ -809,11 +818,15 @@ void addTeam(footBall_Team *team, int &numOfTeam)
     cin >> select;
     team[numOfTeam] = pendingTeam[select - 1];
     numOfTeam++;
+    for (int i = select - 1; i < pendingTeamAmount - 1; i++)
+        pendingTeam[i] = pendingTeam[i + 1];
+    pendingTeamAmount--;
     cout << "Doi bong da duoc them vao danh sach" << endl;
     savedStatus = false;
 }
-void removeTeam(footBall_Team *team, int &numOfTeam)
+void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount)
 {
+    clearSystemLog();
     string border = "+--------------------------+---------------------+----------------+";
     cout << border << endl;
     cout << "| " << left << setw(25) << "TEN DOI"
@@ -827,6 +840,8 @@ void removeTeam(footBall_Team *team, int &numOfTeam)
     int select;
     cout << "Chon doi bong co trong danh sach can xoa: ";
     cin >> select;
+    pendingTeam[pendingTeamAmount] = team[select - 1];
+    pendingTeamAmount++;
     for (int i = select - 1; i < numOfTeam - 1; i++)
     {
         team[i] = team[i + 1];
@@ -1048,10 +1063,11 @@ void aboutUS()
 }
 int main()
 {
-    int numOfTeam, numOfMatch;
+    int numOfTeam, pendingTeamAmount, numOfMatch;
+    footBall_Team *ListPendingTeam = new footBall_Team[20];
     footBall_Team *ListTeam = new footBall_Team[20];
     footBall_Match *ListMatch = new footBall_Match[20];
-    readFile(ListTeam, numOfTeam, ListMatch, numOfMatch);
+    readFile(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, ListMatch, numOfMatch);
     calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
 
     // Audio Configruation
@@ -1261,7 +1277,7 @@ int main()
             switch (selection)
             {
             case 1:
-                addTeam(ListTeam, numOfTeam);
+                addTeam(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount);
                 cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
@@ -1269,7 +1285,7 @@ int main()
                 titleBox();
                 break;
             case 2:
-                removeTeam(ListTeam, numOfTeam);
+                removeTeam(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount);
                 cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
@@ -1350,7 +1366,7 @@ int main()
             clearSystemLog();
             if (savedStatus == false)
             {
-                saveModified(ListTeam, numOfTeam, ListMatch, numOfMatch);
+                saveModified(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, ListMatch, numOfMatch);
                 cout << "Da luu du lieu thanh cong!" << endl;
                 savedStatus = true;
             }
@@ -1387,7 +1403,7 @@ int main()
                 cin >> choice;
                 if (choice == 'y' || choice == 'Y')
                 {
-                    saveModified(ListTeam, numOfTeam, ListMatch, numOfMatch);
+                    saveModified(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, ListMatch, numOfMatch);
                     cout << "Da luu du lieu thanh cong!" << endl;
                     savedStatus = true;
                 }
