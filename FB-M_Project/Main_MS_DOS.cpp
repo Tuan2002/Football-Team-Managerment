@@ -8,30 +8,40 @@
 using namespace std;
 // Global Variables
 bool savedStatus = true;
-bool isAudioOn = false;
+bool isAudioOn = true;
 // Class Declarations
 class footBall_Player;
 class footBall_Team;
 class footBall_Match;
 // Function Prototypes
+// Clears the system log.
 void clearSystemLog();
+// Centers a string in a certain width. ex. centerAlign(10, "Hello") will return "   Hello   "
 string centerAlign(int width, const string &str);
+// Converts a string to proper case. ex. "hello" -> "Hello"
+void toProperCase(string &string);
+// Draws a border
 void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int numOfTeam);
+// Calculates the point of each team
 void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);
+// Reads the file and stores the data in the arrays
 void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, footBall_Match *match, int &numOfMatch);
+// Exports the data to the file
 void exportFile(footBall_Team *team, int numOfTeam);
+// Saves the modified data to the file
 void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *match, int numOfMatch);
+// Filters the data
 void filter(footBall_Team *team, int n);
-void showTeamInfo(footBall_Team *team, int n, string name1, string name2);
-void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount);
-void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount);
-void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch);
-void deleteMatch(footBall_Match *match, int &numOfMatch);
-void searchMember(footBall_Team *team, int numOfTeam);
-void searchTeam(footBall_Team *team, int numOfTeam);
-void scoreBoard(footBall_Match *match, int numOfMatch);
-void titleBox();
-void aboutUS();
+void showTeamInfo(footBall_Team *team, int n, string name1, string name2);                                // Shows the team info
+void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount);    // Adds a team
+void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount); // Removes a team
+void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch);                // Adds a match
+void deleteMatch(footBall_Match *match, int &numOfMatch);                                                 // Deletes a match
+void searchMember(footBall_Team *team, int numOfTeam);                                                    // Searches a member
+void searchTeam(footBall_Team *team, int numOfTeam);                                                      // Searches a team
+void scoreBoard(footBall_Match *match, int numOfMatch);                                                   // Shows the score board
+void titleBox();                                                                                          // Shows the title box
+void aboutUS();                                                                                           // Shows the about us box
 class footBall_Player
 {
 private:
@@ -127,13 +137,13 @@ footBall_Player ::footBall_Player(string name, string id, string birthDay, strin
 }
 void footBall_Player ::showMemberInfo()
 {
-    cout << "| " << left << setw(25) << name;
-    cout << "| " << left << setw(5) << id;
-    cout << "| " << left << setw(11) << birthDay;
-    cout << "| " << left << setw(10) << locator;
-    cout << "| " << left << setw(4) << weight;
-    cout << "| " << left << setw(4) << height;
-    cout << "| " << left << setw(10) << nationaly;
+    cout << "| " << left << setw(24) << name;
+    cout << "|" << centerAlign(9, id);
+    cout << "|" << centerAlign(16, birthDay);
+    cout << "|" << centerAlign(16, locator);
+    cout << "|" << centerAlign(10, to_string(weight));
+    cout << "|" << centerAlign(11, to_string(height));
+    cout << "|" << centerAlign(16, nationaly);
     cout << "|" << endl;
 }
 
@@ -196,35 +206,39 @@ footBall_Team::footBall_Team(footBall_Team &copy)
 void footBall_Team::showInfo()
 {
     cout << "| " << left << setw(25) << teamName
-         << "| " << setw(20) << coach
-         << "| " << setw(14) << country
-         << " |" << endl;
+         << "| " << left << setw(20) << coach
+         << "|" << centerAlign(16, country)
+         << "|" << endl;
 }
 void footBall_Team::showDetail()
 {
     string border = "+--------------------------+---------------------+----------------+";
     cout << border << endl;
-    cout << "| " << left << setw(25) << "TEN DOI"
-         << "| " << setw(20) << "HUAN LUYEN VIEN"
-         << "| " << setw(14) << "DIA PHUONG"
-         << " |" << endl;
+    cout << "|" << centerAlign(26, "TEN DOI BONG")
+         << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(16, "DIA PHUONG")
+         << "|" << endl;
     cout << border << endl;
     showInfo();
     cout << border << endl;
     cout << "Danh sach cau thu: " << endl;
-    string border1 = "+--------------------------+------+------------+-----------+-----+-----+-----------+";
+    string border1 = "+-----+-------------------------+---------+----------------+----------------+----------+-----------+----------------+";
     cout << border1 << endl;
-    cout << "| " << left << setw(25) << "Ho va Ten";
-    cout << "| " << left << setw(5) << "CCCD";
-    cout << "| " << left << setw(11) << "Ngay Sinh";
-    cout << "| " << left << setw(10) << "Vi Tri";
-    cout << "| " << left << setw(4) << "CAN";
-    cout << "| " << left << setw(4) << "CHC";
-    cout << "| " << left << setw(10) << "Quoc Tich";
+    cout << "|" << centerAlign(5, "STT");
+    cout << "|" << centerAlign(25, "HO VA TEN");
+    cout << "|" << centerAlign(9, "SO CCCD");
+    cout << "|" << centerAlign(16, "NGAY SINH");
+    cout << "|" << centerAlign(16, "VI TRI");
+    cout << "|" << centerAlign(10, "CAM NANG");
+    cout << "|" << centerAlign(11, "CHIEU CAO");
+    cout << "|" << centerAlign(16, "QUOC TICH");
     cout << "|" << endl;
     cout << border1 << endl;
     for (int i = 0; i < numOfPlayer; i++)
+    {
+        cout << "|" << centerAlign(5, to_string(i + 1));
         member[i].showMemberInfo();
+    }
     cout << border1 << endl;
 }
 
@@ -295,19 +309,21 @@ footBall_Player footBall_Team::searchPlayer(string name)
 }
 void footBall_Team::changePlayerInfo()
 {
-    string border1 = "+--------------------------+------+------------+-----------+-----+-----+-----------+";
+    string border1 = "+-----+-------------------------+---------+----------------+----------------+----------+-----------+----------------+";
     cout << border1 << endl;
-    cout << "| " << left << setw(25) << "Ho va Ten";
-    cout << "| " << left << setw(5) << "CCCD";
-    cout << "| " << left << setw(11) << "Ngay Sinh";
-    cout << "| " << left << setw(10) << "Vi Tri";
-    cout << "| " << left << setw(4) << "CAN";
-    cout << "| " << left << setw(4) << "CHC";
-    cout << "| " << left << setw(10) << "Quoc Tich";
+    cout << "|" << centerAlign(5, "STT");
+    cout << "|" << centerAlign(25, "HO VA TEN");
+    cout << "|" << centerAlign(9, "SO CCCD");
+    cout << "|" << centerAlign(16, "NGAY SINH");
+    cout << "|" << centerAlign(16, "VI TRI");
+    cout << "|" << centerAlign(10, "Can Nang");
+    cout << "|" << centerAlign(11, "CHIEU CAO");
+    cout << "|" << centerAlign(16, "Quoc Tich");
     cout << "|" << endl;
     cout << border1 << endl;
     for (int i = 0; i < numOfPlayer; i++)
     {
+        cout << "|" << centerAlign(5, to_string(i + 1));
         member[i].showMemberInfo();
     }
     cout << border1 << endl;
@@ -334,6 +350,7 @@ void footBall_Team::changePlayerInfo()
             cout << "Nhap ten moi: ";
             fflush(stdin);
             getline(cin, name);
+            toProperCase(name);
             member[beSelected - 1].name = name;
             cout << "Thay doi thanh cong!" << endl;
             savedStatus = false;
@@ -356,6 +373,7 @@ void footBall_Team::changePlayerInfo()
             cout << "Nhap vi tri moi: ";
             fflush(stdin);
             getline(cin, locator);
+            toProperCase(locator);
             member[beSelected - 1].locator = locator;
             cout << "Thay doi thanh cong!" << endl;
             savedStatus = false;
@@ -386,6 +404,7 @@ void footBall_Team::changePlayerInfo()
             cout << "Nhap quoc tich moi: ";
             fflush(stdin);
             getline(cin, nation);
+            toProperCase(nation);
             member[beSelected - 1].nationaly = nation;
             cout << "Thay doi thanh cong!" << endl;
             savedStatus = false;
@@ -447,11 +466,11 @@ footBall_Match ::footBall_Match(string stadium, string time, string team1_Name, 
 }
 void footBall_Match::showMatchInfo()
 {
-    cout << "| " << left << setw(20) << stadium;
-    cout << "| " << left << setw(11) << time;
-    cout << "| " << left << setw(20) << team1Name;
+    cout << "|" << centerAlign(21, stadium);
+    cout << "|" << centerAlign(12, time);
+    cout << "|" << centerAlign(21, team1Name);
     cout << "| " << left << setw(5) << score1 << " - " << right << setw(5) << score2;
-    cout << " | " << left << setw(20) << team2Name;
+    cout << " |" << centerAlign(21, team2Name);
     cout << "|" << endl;
 }
 void footBall_Match::exportMatchInfo(ofstream &fout)
@@ -472,14 +491,12 @@ string footBall_Match::getNameTeam2()
     return team2Name;
 }
 
-// Define Function
+// Define Global Function
 
 void clearSystemLog()
 {
     system("cls");
 }
-
-// Fomatting String Align to Center
 string centerAlign(int width, const string &str)
 {
     int len = str.length();
@@ -491,6 +508,13 @@ string centerAlign(int width, const string &str)
     int pad1 = diff / 2;
     int pad2 = diff - pad1;
     return string(pad1, ' ') + str + string(pad2, ' ');
+}
+void toProperCase(string &string)
+{
+    string[0] = toupper(string[0]);
+    for (int i = 1; i < string.length(); i++)
+        if (string[i - 1] == ' ')
+            string[i] = toupper(string[i]);
 }
 void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int numOfTeam)
 {
@@ -707,7 +731,7 @@ void filter(footBall_Team *team, int n, sf::Sound options)
     int choice;
     if (isAudioOn == true)
         options.play();
-    cout << "1. Loc cac doi bong theo dia phuong" << endl;
+    cout << "1. Loc cac doi bong theo DIA PHUONG" << endl;
     cout << "2. Loc cac doi bong theo diem" << endl;
     cout << "3. Sap xep cac doi theo diem tu cao den thap" << endl;
     cout << "4. Tro ve menu" << endl;
@@ -721,6 +745,7 @@ void filter(footBall_Team *team, int n, sf::Sound options)
         cout << "Nhap dia phuong can loc: ";
         fflush(stdin);
         getline(cin, country);
+        toProperCase(country);
         for (int i = 0; i < n; i++)
             if (team[i].getCountry() == country)
             {
@@ -769,16 +794,20 @@ void filter(footBall_Team *team, int n, sf::Sound options)
                 }
         savedStatus = false;
         clearSystemLog();
-        string border = "+--------------------------+---------------------+----------------+";
         cout << "Danh sach doi bong sau khi sap xep: " << endl;
+        string border = "+-----+--------------------------+---------------------+----------------+";
         cout << border << endl;
-        cout << "| " << left << setw(25) << "TEN DOI"
-             << "| " << setw(20) << "HUAN LUYEN VIEN"
-             << "| " << setw(14) << "DIA PHUONG"
-             << " |" << endl;
+        cout << "|" << centerAlign(5, "STT")
+             << "|" << centerAlign(26, "TEN DOI BONG")
+             << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+             << "|" << centerAlign(16, "DIA PHUONG")
+             << "|" << endl;
         cout << border << endl;
         for (int i = 0; i < n; i++)
+        {
+            cout << "|" << centerAlign(5, to_string(i + 1));
             team[i].showInfo();
+        }
         cout << border << endl;
         break;
     }
@@ -802,15 +831,19 @@ void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
 void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount)
 {
     clearSystemLog();
-    string border = "+--------------------------+---------------------+----------------+";
+    string border = "+-----+--------------------------+---------------------+----------------+";
     cout << border << endl;
-    cout << "| " << left << setw(25) << "TEN DOI"
-         << "| " << setw(20) << "HUAN LUYEN VIEN"
-         << "| " << setw(14) << "DIA PHUONG"
-         << " |" << endl;
+    cout << "|" << centerAlign(5, "STT")
+         << "|" << centerAlign(26, "TEN DOI BONG")
+         << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(16, "DIA PHUONG")
+         << "|" << endl;
     cout << border << endl;
     for (int i = 0; i < pendingTeamAmount; i++)
+    {
+        cout << "|" << centerAlign(5, to_string(i + 1));
         pendingTeam[i].showInfo();
+    }
     cout << border << endl;
     int select;
     cout << "Co (" << pendingTeamAmount << ") doi bong trong danh sach cho" << endl;
@@ -827,15 +860,19 @@ void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, in
 void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount)
 {
     clearSystemLog();
-    string border = "+--------------------------+---------------------+----------------+";
+    string border = "+-----+--------------------------+---------------------+----------------+";
     cout << border << endl;
-    cout << "| " << left << setw(25) << "TEN DOI"
-         << "| " << setw(20) << "HUAN LUYEN VIEN"
-         << "| " << setw(14) << "DIA PHUONG"
-         << " |" << endl;
+    cout << "|" << centerAlign(5, "STT")
+         << "|" << centerAlign(26, "TEN DOI BONG")
+         << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(16, "DIA PHUONG")
+         << "|" << endl;
     cout << border << endl;
     for (int i = 0; i < numOfTeam; i++)
+    {
+        cout << "|" << centerAlign(5, to_string(i + 1));
         team[i].showInfo();
+    }
     cout << border << endl;
     int select;
     cout << "Chon doi bong co trong danh sach can xoa: ";
@@ -856,15 +893,19 @@ void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &nu
     string teamName1, teamName2, stadium, time;
     int score1, score2;
     int select1, select2;
-    string border = "+--------------------------+---------------------+----------------+";
+    string border = "+-----+--------------------------+---------------------+----------------+";
     cout << border << endl;
-    cout << "| " << left << setw(25) << "TEN DOI"
-         << "| " << setw(20) << "HUAN LUYEN VIEN"
-         << "| " << setw(14) << "DIA PHUONG"
-         << " |" << endl;
+    cout << "|" << centerAlign(5, "STT")
+         << "|" << centerAlign(26, "TEN DOI BONG")
+         << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(16, "DIA PHUONG")
+         << "|" << endl;
     cout << border << endl;
     for (int i = 0; i < numOfTeam; i++)
+    {
+        cout << "|" << centerAlign(5, to_string(i + 1));
         team[i].showInfo();
+    }
     cout << border << endl;
     cout << "Chon doi thu nhat: ";
     cin >> select1;
@@ -887,17 +928,21 @@ void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &nu
 }
 void deleteMatch(footBall_Match *match, int &numOfMatch)
 {
-    string border = "+---------------------+------------+---------------------+---------------+---------------------+";
+    string border = "+-----+---------------------+------------+---------------------+---------------+---------------------+";
     cout << border << endl;
-    cout << "| " << left << setw(20) << "SAN VAN DONG";
-    cout << "| " << setw(11) << "THOI GIAN";
-    cout << "| " << setw(20) << "TEN DOI BONG A";
-    cout << "| " << setw(14) << "    TI SO";
-    cout << "| " << setw(20) << "TEN DOI BONG B";
+    cout << "|" << centerAlign(5, "STT");
+    cout << "|" << centerAlign(21, "SAN VAN DONG");
+    cout << "|" << centerAlign(12, "THOI GIAN");
+    cout << "|" << centerAlign(21, "TEN DOI BONG A");
+    cout << "|" << centerAlign(15, "TI SO");
+    cout << "|" << centerAlign(21, "TEN DOI BONG B");
     cout << "|" << endl;
     cout << border << endl;
     for (int i = 0; i < numOfMatch; i++)
+    {
+        cout << "|" << centerAlign(5, to_string(i + 1));
         match[i].showMatchInfo();
+    }
     cout << border << endl;
     int selectMatch;
     cout << "Chon mot tran dau can xoa: ";
@@ -917,6 +962,7 @@ void searchMember(footBall_Team *team, int numOfTeam)
     cout << "Nhap ten can thu can tim: ";
     fflush(stdin);
     getline(cin, name);
+    toProperCase(name);
     int count = 0;
     for (int i = 0; i < numOfTeam; i++)
         if (team[i].isPlayerExist(name) == true)
@@ -924,17 +970,17 @@ void searchMember(footBall_Team *team, int numOfTeam)
             searchResult[count] = team[i].searchPlayer(name);
             count++;
         }
-    string border1 = "+--------------------------+------+------------+-----------+-----+-----+-----------+";
     if (count > 0)
     {
+        string border1 = "+-------------------------+---------+----------------+----------------+----------+-----------+----------------+";
         cout << border1 << endl;
-        cout << "| " << left << setw(25) << "Ho va Ten";
-        cout << "| " << left << setw(5) << "CCCD";
-        cout << "| " << left << setw(11) << "Ngay Sinh";
-        cout << "| " << left << setw(10) << "Vi Tri";
-        cout << "| " << left << setw(4) << "CAN";
-        cout << "| " << left << setw(4) << "CHC";
-        cout << "| " << left << setw(10) << "Quoc Tich";
+        cout << "|" << centerAlign(25, "HO VA TEN");
+        cout << "|" << centerAlign(9, "SO CCCD");
+        cout << "|" << centerAlign(16, "NGAY SINH");
+        cout << "|" << centerAlign(16, "VI TRI");
+        cout << "|" << centerAlign(10, "CAN NANG");
+        cout << "|" << centerAlign(11, "CHIEU CAO");
+        cout << "|" << centerAlign(16, "QUOC TICH");
         cout << "|" << endl;
         cout << border1 << endl;
         for (int i = 0; i < count; i++)
@@ -954,6 +1000,7 @@ void searchTeam(footBall_Team *team, int numOfTeam)
     cout << "Nhap ten doi can tim: ";
     fflush(stdin);
     getline(cin, name);
+    toProperCase(name);
     for (int i = 0; i < numOfTeam; i++)
         if (team[i].getTeamName() == name)
         {
@@ -974,15 +1021,19 @@ void searchTeam(footBall_Team *team, int numOfTeam)
 void changMemberInfo(footBall_Team *team, int numOfTeam)
 {
     clearSystemLog();
-    string border = "+--------------------------+---------------------+----------------+";
+    string border = "+-----+--------------------------+---------------------+----------------+";
     cout << border << endl;
-    cout << "| " << left << setw(25) << "TEN DOI"
-         << "| " << setw(20) << "HUAN LUYEN VIEN"
-         << "| " << setw(14) << "DIA PHUONG"
-         << " |" << endl;
+    cout << "|" << centerAlign(5, "STT")
+         << "|" << centerAlign(26, "TEN DOI BONG")
+         << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(16, "DIA PHUONG")
+         << "|" << endl;
     cout << border << endl;
     for (int i = 0; i < numOfTeam; i++)
+    {
+        cout << "|" << centerAlign(5, to_string(i + 1));
         team[i].showInfo();
+    }
     cout << border << endl;
     int select;
     cout << "Chon doi bong: ";
@@ -991,17 +1042,21 @@ void changMemberInfo(footBall_Team *team, int numOfTeam)
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
-    string border = "+---------------------+------------+---------------------+---------------+---------------------+";
+    string border = "+-----+---------------------+------------+---------------------+---------------+---------------------+";
     cout << border << endl;
-    cout << "| " << left << setw(20) << "SAN VAN DONG";
-    cout << "| " << setw(11) << "THOI GIAN";
-    cout << "| " << setw(20) << "TEN DOI BONG A";
-    cout << "| " << setw(14) << "    TI SO";
-    cout << "| " << setw(20) << "TEN DOI BONG B";
+    cout << "|" << centerAlign(5, "STT");
+    cout << "|" << centerAlign(21, "SAN VAN DONG");
+    cout << "|" << centerAlign(12, "THOI GIAN");
+    cout << "|" << centerAlign(21, "TEN DOI BONG A");
+    cout << "|" << centerAlign(15, "TI SO");
+    cout << "|" << centerAlign(21, "TEN DOI BONG B");
     cout << "|" << endl;
     cout << border << endl;
     for (int i = 0; i < numOfMatch; i++)
+    {
+        cout << "|" << centerAlign(5, to_string(i + 1));
         match[i].showMatchInfo();
+    }
     cout << border << endl;
 }
 void titleBox()
@@ -1128,15 +1183,19 @@ int main()
         case 1:
         {
             clearSystemLog();
-            string border = "+--------------------------+---------------------+----------------+";
+            string border = "+-----+--------------------------+---------------------+----------------+";
             cout << border << endl;
-            cout << "| " << left << setw(25) << "TEN DOI"
-                 << "| " << setw(20) << "HUAN LUYEN VIEN"
-                 << "| " << setw(14) << "DIA PHUONG"
-                 << " |" << endl;
+            cout << "|" << centerAlign(5, "STT")
+                 << "|" << centerAlign(26, "TEN DOI BONG")
+                 << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+                 << "|" << centerAlign(16, "DIA PHUONG")
+                 << "|" << endl;
             cout << border << endl;
             for (int i = 0; i < numOfTeam; i++)
+            {
+                cout << "|" << centerAlign(5, to_string(i + 1));
                 ListTeam[i].showInfo();
+            }
             cout << border << endl;
             int select;
             if (isAudioOn == true)
@@ -1230,9 +1289,10 @@ int main()
         {
             clearSystemLog();
             cout << "Thong tin diem cua cac doi bong: " << endl;
-            string border = "+--------------------------+-------+-------+-------+-------+";
+            string border = "+-----+--------------------------+-------+-------+-------+-------+";
             cout << border << endl;
-            cout << "| " << left << setw(25) << "TEN DOI BONG"
+            cout << "|" << centerAlign(5, "STT")
+                 << "| " << left << setw(25) << "TEN DOI BONG"
                  << "| " << setw(6) << "THANG"
                  << "| " << setw(6) << "THUA"
                  << "| " << setw(6) << " HOA"
@@ -1240,7 +1300,10 @@ int main()
                  << "|" << endl;
             cout << border << endl;
             for (int i = 0; i < numOfTeam; i++)
+            {
+                cout << "|" << centerAlign(5, to_string(i + 1));
                 ListTeam[i].showPoint();
+            }
             cout << border << endl;
             cout << "Bam ENTER de quay ve man hinh chinh...";
             fflush(stdin);
