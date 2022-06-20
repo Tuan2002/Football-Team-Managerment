@@ -16,9 +16,9 @@ class footBall_Match;
 // Function Prototypes
 // Clears the system log.
 void clearSystemLog();
-// Centers a string in a certain width. ex. centerAlign(10, "Hello") will return "   Hello   "
+// Centers a string in a certain width. ex: centerAlign(10, "Hello") will return "   Hello   "
 string centerAlign(int width, const string &str);
-// Converts a string to proper case. ex. "hello" -> "Hello"
+// Converts a string to proper case. ex: "bui truong phuong" -> "Bui Truong Phuong"
 void toProperCase(string &string);
 // Draws a border
 void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int numOfTeam);
@@ -54,10 +54,11 @@ private:
     string locator;
 
 public:
-    footBall_Player();
+    footBall_Player(); // Constructor
+    // Constructor with parameters
     footBall_Player(string name, string id, string birthDay, string nationaly, int height, int weight, string locator);
-    void showMemberInfo();
-    friend class footBall_Team;
+    void showMemberInfo();      // Shows the member info
+    friend class footBall_Team; // Friend class
 };
 class footBall_Team
 {
@@ -65,7 +66,7 @@ private:
     string teamName;
     string country;
     string coach;
-    footBall_Player *member;
+    footBall_Player *member; // Array of members of the team
     int numOfPlayer;
     int point;
     int winMatch;
@@ -73,26 +74,26 @@ private:
     int drawMatch;
 
 public:
-    footBall_Team();
-    footBall_Team(string &teamName, string &country, string &coach);
-    void showInfo();
-    void showDetail();
-    void showPoint();
-    string getTeamName();
-    string getCoach();
-    string getCountry();
-    string getMemberName(int index);
-    int getPoint();
-    void setPoint(int point);
-    void setDefaultPoint();
-    void setWinMatch(int winMatch);
-    void setLoseMatch(int loseMatch);
-    void setDrawMatch(int drawMatch);
-    bool isPlayerExist(string name);
-    footBall_Player searchPlayer(string name);
-    void changePlayerInfo();
-    void saveChange();
-    footBall_Team(footBall_Team &copy);
+    footBall_Team();                                                 // Constructor
+    footBall_Team(string &teamName, string &country, string &coach); // Constructor with parameters
+    void showInfo();                                                 // Shows the team info
+    void showDetail();                                               // Shows the team detail
+    void showPoint();                                                // Shows the team point
+    string getTeamName();                                            // Returns the team name
+    string getCoach();                                               // Returns the coach
+    string getCountry();                                             // Returns the country
+    string getMemberName(int index);                                 // Returns the member name
+    int getPoint();                                                  // Returns the point
+    void setPoint(int point);                                        // Sets the point
+    void setDefaultPoint();                                          // Sets the default point
+    void setWinMatch(int winMatch);                                  // Sets the win match
+    void setLoseMatch(int loseMatch);                                // Sets the lose match
+    void setDrawMatch(int drawMatch);                                // Sets the draw match
+    bool isPlayerExist(string name);                                 // Checks if the player exists
+    footBall_Player searchPlayer(string name);                       // Searches a player
+    void changePlayerInfo();                                         // Changes a player info
+    void saveChange();                                               // Saves the changed player info
+    footBall_Team(footBall_Team &copy);                              // Copy constructor
 };
 class footBall_Match
 {
@@ -105,13 +106,13 @@ private:
     int score2;
 
 public:
-    footBall_Match();
-    footBall_Match(string stadium, string time, string team1_Name, string team2_Name, int score1, int score2);
-    void showMatchInfo();
-    void exportMatchInfo(ofstream &fout);
-    string getNameTeam1();
-    string getNameTeam2();
-    friend void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);
+    footBall_Match();                                                                                          // Constructor
+    footBall_Match(string stadium, string time, string team1_Name, string team2_Name, int score1, int score2); // Constructor with parameters
+    void showMatchInfo();                                                                                      // Shows the match info
+    void exportMatchInfo(ofstream &fout);                                                                      // Exports the match info
+    string getNameTeam1();                                                                                     // Returns the team 1 name
+    string getNameTeam2();                                                                                     // Returns the team 2 name
+    friend void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);          // Friend function
 };
 
 // Class footBall_Player Methods
@@ -141,7 +142,7 @@ void footBall_Player ::showMemberInfo()
     cout << "|" << centerAlign(9, id);
     cout << "|" << centerAlign(16, birthDay);
     cout << "|" << centerAlign(16, locator);
-    cout << "|" << centerAlign(10, to_string(weight));
+    cout << "|" << centerAlign(10, to_string(weight)); // to_string converts int to string
     cout << "|" << centerAlign(11, to_string(height));
     cout << "|" << centerAlign(16, nationaly);
     cout << "|" << endl;
@@ -170,15 +171,17 @@ footBall_Team ::footBall_Team(string &teamName, string &country, string &coach)
     winMatch = 0;
     loseMatch = 0;
     drawMatch = 0;
-    string fileName = "./Danh Sach Cau Thu/" + teamName + ".csv";
-    // Ten file vi du "Song Lam Nghe Anh.csv"
-    member = new footBall_Player[20];
-    ifstream fin;
-    fin.open(fileName);
+    string fileName = "./Danh Sach Cau Thu/" + teamName + ".csv"; // Creates the file name
+    // ex: "Song Lam Nghe An.csv"
+    member = new footBall_Player[20]; // Creates the member array
+    ifstream fin;                     // Creates the input file stream
+    fin.open(fileName);               // Opens the file
     int count = 0;
-    fin.ignore(256, '\n');
-    while (!fin.eof())
+    fin.ignore(256, '\n'); // Ignores the first line of the file
+    while (!fin.eof())     // Checks if the end of file is reached
     {
+        // Reads the file one line at a time
+        // Creates the temporary variables to get the data from the file
         string name, id, birthDay, nationaly, locator, height, weight;
         getline(fin, name, ';');
         getline(fin, birthDay, ';');
@@ -186,12 +189,12 @@ footBall_Team ::footBall_Team(string &teamName, string &country, string &coach)
         getline(fin, id, ';');
         getline(fin, locator, ';');
         getline(fin, height, ';');
-        getline(fin, weight, '\n');
-        member[count] = footBall_Player(name, id, birthDay, nationaly, stoi(height), stoi(weight), locator);
-        count++;
+        getline(fin, weight, '\n');                                                                          //"\n" is character the end of line
+        member[count] = footBall_Player(name, id, birthDay, nationaly, stoi(height), stoi(weight), locator); // Creates the member
+        count++;                                                                                             // Increments the count
     }
-    numOfPlayer = count;
-    fin.close();
+    numOfPlayer = count; // Sets the number of player
+    fin.close();         // Closes the file
 }
 footBall_Team::footBall_Team(footBall_Team &copy)
 {
@@ -293,6 +296,7 @@ void footBall_Team::setDrawMatch(int drawMatch)
 }
 bool footBall_Team::isPlayerExist(string name)
 {
+    // if this function returns true, the player is exist in the team
     for (int i = 0; i < numOfPlayer; i++)
         if (member[i].name == name)
             return true;
@@ -302,7 +306,7 @@ footBall_Player footBall_Team::searchPlayer(string name)
 {
     for (int i = 0; i < numOfPlayer; i++)
     {
-        if (member[i].name == name)
+        if (member[i].name == name) // Checks if the name is found
             return member[i];
     }
     return footBall_Player();
@@ -324,7 +328,7 @@ void footBall_Team::changePlayerInfo()
     for (int i = 0; i < numOfPlayer; i++)
     {
         cout << "|" << centerAlign(5, to_string(i + 1));
-        member[i].showMemberInfo();
+        member[i].showMemberInfo(); // Use the showMemberInfo function to show the member info
     }
     cout << border1 << endl;
     cout << "Chon cau thu can thay doi thong tin: ";
@@ -425,9 +429,9 @@ void footBall_Team::changePlayerInfo()
 }
 void footBall_Team::saveChange()
 {
-    string fileName = "./Danh Sach Cau Thu/" + teamName + ".csv";
-    ofstream fout;
-    fout.open(fileName);
+    string fileName = "./Danh Sach Cau Thu/" + teamName + ".csv"; // The file name is the team name
+    ofstream fout;                                                // Create a file stream
+    fout.open(fileName);                                          // Open the file with file name was defined above
     fout << "HO VA TEN;NGAY SINH;QUOC TICH;SO CCCD;VI TRI;CHIEU CAO;CAN NANG\n";
     for (int i = 0; i < numOfPlayer; i++)
     {
@@ -437,7 +441,7 @@ void footBall_Team::saveChange()
              << member[i].id << ";"
              << member[i].locator << ";"
              << member[i].height << ";";
-        if (i == numOfPlayer - 1)
+        if (i == numOfPlayer - 1) // If this is the last player, don't add a "endl"
         {
             fout << member[i].weight;
             break;
@@ -500,22 +504,22 @@ void clearSystemLog()
 
 string centerAlign(int width, const string &str)
 {
-    int len = str.length();
+    int len = str.length(); // Get the length of the string
     if (width < len)
     {
-        return str;
+        return str; // If the width is smaller than the length, return the string
     }
     int diff = width - len;
     int pad1 = diff / 2;
     int pad2 = diff - pad1;
-    return string(pad1, ' ') + str + string(pad2, ' ');
+    return string(pad1, ' ') + str + string(pad2, ' '); // Return the string with padding
 }
 void toProperCase(string &string)
 {
-    string[0] = toupper(string[0]);
+    string[0] = toupper(string[0]); // Make the first letter of the string upper case. ex: "nguyen anh tuan" -> "Nguyen anh tuan"
     for (int i = 1; i < string.length(); i++)
         if (string[i - 1] == ' ')
-            string[i] = toupper(string[i]);
+            string[i] = toupper(string[i]); // Make the letter after a space upper case. ex: "Nguyen anh tuan" -> "Nguyen Anh Tuan"
 }
 void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int numOfTeam)
 {
@@ -527,19 +531,21 @@ void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int num
 void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam)
 {
     for (int i = 0; i < numofTeam; i++)
-        team[i].setDefaultPoint();
+        team[i].setDefaultPoint(); // Reset the point of each team, so that the point will be recounted
     for (int i = 0; i < numofMatch; i++)
+        // If the score of team 1 is greater than team 2, team 1 will get 3 point
         if (match[i].score1 > match[i].score2)
             for (int j = 0; j < numofTeam; j++)
             {
-                if (match[i].getNameTeam1() == team[j].getTeamName())
+                if (match[i].getNameTeam1() == team[j].getTeamName()) // Find the team 1 in the team array to add 3 point
                 {
                     team[j].setPoint(3);
-                    team[j].setWinMatch(1);
+                    team[j].setWinMatch(1); // Team 1 be added 1 win match
                 };
                 if (match[i].getNameTeam2() == team[j].getTeamName())
-                    team[j].setLoseMatch(1);
+                    team[j].setLoseMatch(1); // Team 2 be added 1 lose match
             }
+        // If the score of team 1 is smaller than team 2, team 2 will get 3 point
         else if (match[i].score1 < match[i].score2)
             for (int j = 0; j < numofTeam; j++)
             {
@@ -551,6 +557,7 @@ void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int n
                 if (match[i].getNameTeam1() == team[j].getTeamName())
                     team[j].setLoseMatch(1);
             }
+        // If the score of team 1 is equal to team 2, both team will get 1 point
         else
             for (int j = 0; j < numofTeam; j++)
             {
@@ -568,26 +575,26 @@ void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int n
 }
 void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, footBall_Match *match, int &numOfMatch)
 {
-    ifstream fin;
-    fin.open("./DS Doi Bong.csv");
-    string teamName, country, coach, temp;
+    ifstream fin;                          // Declare a file input stream
+    fin.open("./DS Doi Bong.csv");         // Open the file "DS Doi Bong.csv"
+    string teamName, country, coach, temp; // Declare string variables to store the data of each line
     int count = 0;
-    fin.ignore(256, '\n');
+    fin.ignore(256, '\n'); // Ignore the first line of the file
     while (!fin.eof())
     {
         getline(fin, teamName, ';');
         getline(fin, coach, ';');
         getline(fin, temp, '\n');
-        int possiton = temp.find('\r');
-        country = temp.substr(0, possiton);
-        team[count] = footBall_Team(teamName, country, coach);
-        count++;
+        int possiton = temp.find('\r');                        // Find the position of '\r', which is the same as '\n'.
+        country = temp.substr(0, possiton);                    // Get the country of the team without '\r'
+        team[count] = footBall_Team(teamName, country, coach); // Create a new team object and add it to the team array
+        count++;                                               // Increase the number of team
     }
     fin.close();
-    numOfTeam = count;
+    numOfTeam = count; // Set the number of team to the number of team in the file
     fin.open("./DS Tran Dau.csv");
-    string stadium, time, team1_Name, team2_Name, score1, score2;
-    count = 0;
+    string stadium, time, team1_Name, team2_Name, score1, score2; // Declare string variables to store the data of each line
+    count = 0;                                                    // Reset count = 0, to count the number of match
     fin.ignore(256, '\n');
     while (!fin.eof())
     {
@@ -598,13 +605,13 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, i
         getline(fin, score1, ';');
         getline(fin, score2, '\n');
         match[count] = footBall_Match(stadium, time, team1_Name, team2_Name, stoi(score1), stoi(score2));
-        count++;
+        count++; // Increase the number of match
     }
     fin.close();
-    numOfMatch = count;
+    numOfMatch = count; // Set the number of match to the number of match in the file
     fin.open("./Doi Bong Cho.csv");
     fin.ignore(256, '\n');
-    count = 0;
+    count = 0; // Reset count = 0, to count the number of pending team
     while (!fin.eof())
     {
         getline(fin, teamName, ';');
@@ -613,9 +620,9 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, i
         int possiton = temp.find('\r');
         country = temp.substr(0, possiton);
         pendingTeam[count] = footBall_Team(teamName, country, coach);
-        count++;
+        count++; // Increase the number of pending team
     }
-    pendingTeamAmount = count;
+    pendingTeamAmount = count; // Set the number of pending team to the number of pending team in the file
     fin.close();
 }
 void exportFile(footBall_Team *team, int numOfTeam)
@@ -636,50 +643,51 @@ void exportFile(footBall_Team *team, int numOfTeam)
     fout << endl
          << centerAlign(width, title) << endl
          << endl;
-    drawBorder(fout, firstBorder, expandBorder, numOfTeam);
+    drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the first border
     fout << tilte1;
     for (int i = 0; i < numOfTeam; i++)
     {
-        fout << centerAlign(23, to_string(i + 1)) << "|";
+        fout << centerAlign(23, to_string(i + 1)) << "|"; // Print the number of team with label "STT". ex: 1, 2, 3, ...
     }
     fout << endl;
-    drawBorder(fout, firstBorder, expandBorder, numOfTeam);
+    drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the second border
     fout << title2;
     for (int i = 0; i < numOfTeam; i++)
-        fout << centerAlign(23, team[i].getTeamName()) << "|";
+        fout << centerAlign(23, team[i].getTeamName()) << "|"; // Print the name of team
     fout << endl;
-    drawBorder(fout, firstBorder, expandBorder, numOfTeam);
+    drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the third border
     fout << title3;
     for (int i = 0; i < numOfTeam; i++)
-        fout << centerAlign(23, team[i].getCoach()) << "|";
+        fout << centerAlign(23, team[i].getCoach()) << "|"; // Print the name of coach
     fout << endl;
-    drawBorder(fout, firstBorder, expandBorder, numOfTeam);
+    drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the fourth border
     fout << title4;
     for (int i = 0; i < numOfTeam; i++)
-        fout << centerAlign(23, team[i].getCountry()) << "|";
+        fout << centerAlign(23, team[i].getCountry()) << "|"; // Print the name of country
     fout << endl;
-    drawBorder(fout, firstBorder, expandBorder, numOfTeam);
+    drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the fifth border
     fout << title5;
     for (int i = 0; i < numOfTeam; i++)
-        fout << centerAlign(23, to_string(team[i].getPoint())) << "|";
+        fout << centerAlign(23, to_string(team[i].getPoint())) << "|"; // Print the point of team
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam);
     fout << title6;
+    //* in the following code, I use a for loop to print one member of the all team in a line.
     for (int i = 0; i < numOfTeam; i++)
-        fout << left << " " << setw(22) << team[i].getMemberName(0) << "|";
+        fout << left << " " << setw(22) << team[i].getMemberName(0) << "|"; // Print the name of first member
     fout << endl;
     for (int memberCount = 1; memberCount < 11; memberCount++)
     {
         fout << title7;
         for (int i = 0; i < numOfTeam; i++)
-            fout << left << " " << setw(22) << team[i].getMemberName(memberCount) << "|";
+            fout << left << " " << setw(22) << team[i].getMemberName(memberCount) << "|"; // Print the name of member
         fout << endl;
     }
-    drawBorder(fout, firstBorder, expandBorder, numOfTeam);
-    const time_t currentTime = time(0);
-    tm *localTime = localtime(&currentTime);
+    drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the sixth border
+    const time_t currentTime = time(0);                     // Get the current time
+    tm *localTime = localtime(&currentTime);                // Convert the current time to local time
     string modifiedDay = "Ngay Tong Hop: " + to_string(localTime->tm_mday) + "/" + to_string(localTime->tm_mon + 1) + "/" + to_string(localTime->tm_year + 1900) + " - " + to_string(localTime->tm_hour) + ":" + to_string(localTime->tm_min) + ":" + to_string(localTime->tm_sec);
-    fout << centerAlign(width, modifiedDay) << endl;
+    fout << centerAlign(width, modifiedDay) << endl; // Print the modified day
 }
 void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *match, int numOfMatch)
 {
@@ -727,12 +735,12 @@ void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam
 }
 void filter(footBall_Team *team, int n, sf::Sound options)
 {
-    int FILT_ARRAY[50];
+    int FILT_ARRAY[50]; // Array to store the number of team that satisfy the filter
     int count = 0;
     int choice;
     if (isAudioOn == true)
         options.play();
-    cout << "1. Loc cac doi bong theo DIA PHUONG" << endl;
+    cout << "1. Loc cac doi bong theo dia phuong" << endl;
     cout << "2. Loc cac doi bong theo diem" << endl;
     cout << "3. Sap xep cac doi theo diem tu cao den thap" << endl;
     cout << "4. Tro ve menu" << endl;
@@ -748,10 +756,10 @@ void filter(footBall_Team *team, int n, sf::Sound options)
         getline(cin, country);
         toProperCase(country);
         for (int i = 0; i < n; i++)
-            if (team[i].getCountry() == country)
+            if (team[i].getCountry() == country) // Check if the country is exist
             {
-                FILT_ARRAY[count] = i;
-                count++;
+                FILT_ARRAY[count] = i; // Store the index of team that satisfy the filter
+                count++;               // Increase the number of team that satisfy the filter
             }
         clearSystemLog();
         if (count == 0)
@@ -783,7 +791,7 @@ void filter(footBall_Team *team, int n, sf::Sound options)
         }
         break;
     case 3:
-
+        // Sort the team by point from highest to lowest with bubble sort
         footBall_Team temp;
         for (int i = 0; i < n; i++)
             for (int j = i + 1; j < n; j++)
@@ -793,7 +801,7 @@ void filter(footBall_Team *team, int n, sf::Sound options)
                     team[i] = team[j];
                     team[j] = temp;
                 }
-        savedStatus = false;
+        savedStatus = false; // Set the status of saved file to false
         clearSystemLog();
         cout << "Danh sach doi bong sau khi sap xep: " << endl;
         string border = "+-----+--------------------------+---------------------+----------------+";
@@ -843,18 +851,18 @@ void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, in
     for (int i = 0; i < pendingTeamAmount; i++)
     {
         cout << "|" << centerAlign(5, to_string(i + 1));
-        pendingTeam[i].showInfo();
+        pendingTeam[i].showInfo(); // Show the team that is pending
     }
     cout << border << endl;
     int select;
     cout << "Co (" << pendingTeamAmount << ") doi bong trong danh sach cho" << endl;
     cout << "Chon doi bong co trong danh sach de them: ";
     cin >> select;
-    team[numOfTeam] = pendingTeam[select - 1];
-    numOfTeam++;
+    team[numOfTeam] = pendingTeam[select - 1]; // Add the team to the team array
+    numOfTeam++;                               // Increase the number of team
     for (int i = select - 1; i < pendingTeamAmount - 1; i++)
-        pendingTeam[i] = pendingTeam[i + 1];
-    pendingTeamAmount--;
+        pendingTeam[i] = pendingTeam[i + 1]; // Remove the team from the pending team array
+    pendingTeamAmount--;                     // Decrease the number of pending team
     cout << "Doi bong da duoc them vao danh sach" << endl;
     savedStatus = false;
 }
@@ -878,15 +886,13 @@ void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam,
     int select;
     cout << "Chon doi bong co trong danh sach can xoa: ";
     cin >> select;
-    pendingTeam[pendingTeamAmount] = team[select - 1];
-    pendingTeamAmount++;
+    pendingTeam[pendingTeamAmount] = team[select - 1]; // Add the team to the pending team array
+    pendingTeamAmount++;                               // Increase the number of pending team
     for (int i = select - 1; i < numOfTeam - 1; i++)
-    {
-        team[i] = team[i + 1];
-    }
-    numOfTeam--;
+        team[i] = team[i + 1]; // Remove the team from the team array
+    numOfTeam--;               // Decrease the number of team
     cout << "Da xoa mot doi bong thanh cong!\n";
-    savedStatus = false;
+    savedStatus = false; // Set the status of saved file to false
 }
 void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch)
 {
@@ -905,15 +911,15 @@ void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &nu
     for (int i = 0; i < numOfTeam; i++)
     {
         cout << "|" << centerAlign(5, to_string(i + 1));
-        team[i].showInfo();
+        team[i].showInfo(); // Show the list of team
     }
     cout << border << endl;
     cout << "Chon doi thu nhat: ";
     cin >> select1;
     cout << "Chon doi thu hai: ";
     cin >> select2;
-    teamName1 = team[select1 - 1].getTeamName();
-    teamName2 = team[select2 - 1].getTeamName();
+    teamName1 = team[select1 - 1].getTeamName(); // Get the name of team 1
+    teamName2 = team[select2 - 1].getTeamName(); // Get the name of team 2
     cout << "Nhap ten SVD: ";
     fflush(stdin);
     getline(cin, stadium);
@@ -922,10 +928,10 @@ void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &nu
     getline(cin, time);
     cout << "Nhap ti so cua tran dau: ";
     cin >> score1 >> score2;
-    match[numOfMatch] = footBall_Match(stadium, time, teamName1, teamName2, score1, score2);
-    numOfMatch++;
+    match[numOfMatch] = footBall_Match(stadium, time, teamName1, teamName2, score1, score2); // Create a new match object and add it to the match array
+    numOfMatch++;                                                                            // Increase the number of match
     cout << "Da them mot tran dau thanh cong!\n";
-    savedStatus = false;
+    savedStatus = false; // Set the status of saved file to false
 }
 void deleteMatch(footBall_Match *match, int &numOfMatch)
 {
@@ -950,9 +956,9 @@ void deleteMatch(footBall_Match *match, int &numOfMatch)
     cin >> selectMatch;
     for (int i = selectMatch - 1; i < numOfMatch - 1; i++)
     {
-        match[i] = match[i + 1];
+        match[i] = match[i + 1]; // Remove a match from match array
     }
-    numOfMatch--;
+    numOfMatch--; // Decrease the number of match
     cout << "Da xoa tran dau thanh cong!" << endl;
     savedStatus = false;
 }
@@ -966,10 +972,10 @@ void searchMember(footBall_Team *team, int numOfTeam)
     toProperCase(name);
     int count = 0;
     for (int i = 0; i < numOfTeam; i++)
-        if (team[i].isPlayerExist(name) == true)
+        if (team[i].isPlayerExist(name) == true) // if player exist in team
         {
-            searchResult[count] = team[i].searchPlayer(name);
-            count++;
+            searchResult[count] = team[i].searchPlayer(name); // Add player to search result array
+            count++;                                          // increase count
         }
     if (count > 0)
     {
@@ -995,7 +1001,7 @@ void searchMember(footBall_Team *team, int numOfTeam)
 }
 void searchTeam(footBall_Team *team, int numOfTeam)
 {
-    footBall_Team searchResult;
+    footBall_Team searchResult; // Create a team object to store the result of search
     string name;
     bool isExist = false;
     cout << "Nhap ten doi can tim: ";
@@ -1005,14 +1011,14 @@ void searchTeam(footBall_Team *team, int numOfTeam)
     for (int i = 0; i < numOfTeam; i++)
         if (team[i].getTeamName() == name)
         {
-            searchResult = team[i];
-            isExist = true;
+            searchResult = team[i]; // Add team to search result object
+            isExist = true;         // Set isExist to true
             break;
         }
-    if (isExist == true)
+    if (isExist == true) // Check if team exist
     {
         cout << "Ket qua tim kiem: " << endl;
-        searchResult.showDetail();
+        searchResult.showDetail(); // Show the detail of team
     }
     else
     {
@@ -1039,7 +1045,7 @@ void changMemberInfo(footBall_Team *team, int numOfTeam)
     int select;
     cout << "Chon doi bong: ";
     cin >> select;
-    team[select - 1].changePlayerInfo();
+    team[select - 1].changePlayerInfo(); // Change player info of team
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
@@ -1068,8 +1074,6 @@ void titleBox()
     string border4 = "*    FOOTBALL PLAYER MANAGERMENT PROGRAM    *";
     string border6 = "*           Developed by Team 5             *";
     string border7 = "*          Supported by Kim Oanh            *";
-    cout.setf(ios::right, ios::adjustfield);
-    cout.width(20);
     cout << border0 << endl;
     cout << border1 << endl;
     cout << border3 << endl;
@@ -1094,8 +1098,6 @@ void aboutUS()
     string border10 = "*              HAVE A GOOD EXPERIENCE              *";
     string border11 = "*                    THANK YOU                     *";
     string border12 = "*                                                  *";
-    cout.setf(ios::right, ios::adjustfield);
-    cout.width(20);
     cout << border0 << endl;
     cout << border12 << endl;
     cout << border1 << endl;
@@ -1119,17 +1121,17 @@ void aboutUS()
 }
 int main()
 {
-    int numOfTeam, pendingTeamAmount, numOfMatch;
-    footBall_Team *ListPendingTeam = new footBall_Team[20];
-    footBall_Team *ListTeam = new footBall_Team[20];
-    footBall_Match *ListMatch = new footBall_Match[20];
+    int numOfTeam, pendingTeamAmount, numOfMatch;           // Number of team, number of pending team, number of match
+    footBall_Team *ListPendingTeam = new footBall_Team[20]; // Create list of pending team
+    footBall_Team *ListTeam = new footBall_Team[20];        // Create list of team
+    footBall_Match *ListMatch = new footBall_Match[20];     // Create list of match
     readFile(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, ListMatch, numOfMatch);
     calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
 
     // Audio Configruation
 
-    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, about;
-    sf::Sound welcome, selectOption, selectTeam, selectMatch, aboutUS;
+    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, about;         // Sound Buffer
+    sf::Sound welcome, selectOption, selectTeam, selectMatch, aboutUS; // create a sound buffer
     if (isAudioOn == true)
     {
         welc.loadFromFile("./Audio/Welcome.wav");
