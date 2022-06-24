@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "SFML/Audio.hpp"
 using namespace std;
+using namespace sf;
 // Global Variables
 bool savedStatus = true;
 bool isAudioOn = true;
@@ -31,17 +32,18 @@ void exportFile(footBall_Team *team, int numOfTeam);
 // Saves the modified data to the file
 void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *match, int numOfMatch);
 // Filters the data
-void filter(footBall_Team *team, int n);
-void showTeamInfo(footBall_Team *team, int n, string name1, string name2);                                // Shows the team info
-void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount);    // Adds a team
-void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount); // Removes a team
-void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch);                // Adds a match
-void deleteMatch(footBall_Match *match, int &numOfMatch);                                                 // Deletes a match
-void searchMember(footBall_Team *team, int numOfTeam);                                                    // Searches a member
-void searchTeam(footBall_Team *team, int numOfTeam);                                                      // Searches a team
-void scoreBoard(footBall_Match *match, int numOfMatch);                                                   // Shows the score board
-void titleBox();                                                                                          // Shows the title box
-void aboutUS();                                                                                           // Shows the about us box
+void filter(footBall_Team *team, int n, Sound options);
+void showTeamInfo(footBall_Team *team, int n, string name1, string name2);                                                  // Shows the team info
+void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam);    // Adds a team
+void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam); // Removes a team
+void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch);                                  // Adds a match
+void deleteMatch(footBall_Match *match, int &numOfMatch, Sound selectMatch);                                                // Deletes a match
+void searchMember(footBall_Team *team, int numOfTeam);                                                                      // Searches a member
+void searchTeam(footBall_Team *team, int numOfTeam);                                                                        // Searches a team
+void changMemberInfo(footBall_Team *team, int numOfTeam, Sound selecTeam, Sound optional);                                  // Changes a member info
+void scoreBoard(footBall_Match *match, int numOfMatch);                                                                     // Shows the score board
+void titleBox();                                                                                                            // Shows the title box
+void aboutUS();                                                                                                             // Shows the about us box
 class footBall_Player
 {
 private:
@@ -91,7 +93,7 @@ public:
     void setDrawMatch(int drawMatch);                                // Sets the draw match
     bool isPlayerExist(string name);                                 // Checks if the player exists
     footBall_Player searchPlayer(string name);                       // Searches a player
-    void changePlayerInfo();                                         // Changes a player info
+    void changePlayerInfo(Sound optional);                           // Changes a player info
     void saveChange();                                               // Saves the changed player info
     footBall_Team(footBall_Team &copy);                              // Copy constructor
 };
@@ -311,7 +313,7 @@ footBall_Player footBall_Team::searchPlayer(string name)
     }
     return footBall_Player();
 }
-void footBall_Team::changePlayerInfo()
+void footBall_Team::changePlayerInfo(Sound optional)
 {
     string border1 = "+-----+-------------------------+---------+----------------+----------------+----------+-----------+----------------+";
     cout << border1 << endl;
@@ -343,6 +345,7 @@ void footBall_Team::changePlayerInfo()
     cout << "6. Thay doi quoc tich cau thu \n";
     cout << "7. Thay doi ngay sinh cau thu \n";
     cout << "Lua chon: ";
+    optional.play();
     int select;
     cin >> select;
     clearSystemLog();
@@ -733,7 +736,7 @@ void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam
     for (int i = 0; i < numOfTeam; i++)
         team[i].saveChange();
 }
-void filter(footBall_Team *team, int n, sf::Sound options)
+void filter(footBall_Team *team, int n, Sound options)
 {
     int FILT_ARRAY[50]; // Array to store the number of team that satisfy the filter
     int count = 0;
@@ -837,7 +840,7 @@ void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
         if (team[i].getTeamName() == name2)
             team[i].showDetail();
 }
-void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount)
+void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam)
 {
     clearSystemLog();
     string border = "+-----+--------------------------+---------------------+----------------+";
@@ -856,6 +859,7 @@ void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, in
     cout << border << endl;
     int select;
     cout << "Co (" << pendingTeamAmount << ") doi bong trong danh sach cho" << endl;
+    selectTeam.play();
     cout << "Chon doi bong co trong danh sach de them: ";
     cin >> select;
     team[numOfTeam] = pendingTeam[select - 1]; // Add the team to the team array
@@ -866,7 +870,7 @@ void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, in
     cout << "Doi bong da duoc them vao danh sach" << endl;
     savedStatus = false;
 }
-void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount)
+void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selecTeam)
 {
     clearSystemLog();
     string border = "+-----+--------------------------+---------------------+----------------+";
@@ -883,6 +887,7 @@ void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam,
         team[i].showInfo();
     }
     cout << border << endl;
+    selecTeam.play();
     int select;
     cout << "Chon doi bong co trong danh sach can xoa: ";
     cin >> select;
@@ -933,7 +938,7 @@ void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &nu
     cout << "Da them mot tran dau thanh cong!\n";
     savedStatus = false; // Set the status of saved file to false
 }
-void deleteMatch(footBall_Match *match, int &numOfMatch)
+void deleteMatch(footBall_Match *match, int &numOfMatch, Sound sltMatch)
 {
     string border = "+-----+---------------------+------------+---------------------+---------------+---------------------+";
     cout << border << endl;
@@ -951,6 +956,7 @@ void deleteMatch(footBall_Match *match, int &numOfMatch)
         match[i].showMatchInfo();
     }
     cout << border << endl;
+    sltMatch.play();
     int selectMatch;
     cout << "Chon mot tran dau can xoa: ";
     cin >> selectMatch;
@@ -1025,7 +1031,7 @@ void searchTeam(footBall_Team *team, int numOfTeam)
         cout << "Khong tim thay doi co ten: " << name << endl;
     }
 }
-void changMemberInfo(footBall_Team *team, int numOfTeam)
+void changMemberInfo(footBall_Team *team, int numOfTeam, Sound selecTeam, Sound optional)
 {
     clearSystemLog();
     string border = "+-----+--------------------------+---------------------+----------------+";
@@ -1042,10 +1048,11 @@ void changMemberInfo(footBall_Team *team, int numOfTeam)
         team[i].showInfo();
     }
     cout << border << endl;
+    selecTeam.play(); // Play sound
     int select;
     cout << "Chon doi bong: ";
     cin >> select;
-    team[select - 1].changePlayerInfo(); // Change player info of team
+    team[select - 1].changePlayerInfo(optional); // Change player info of team
 }
 void scoreBoard(footBall_Match *match, int numOfMatch)
 {
@@ -1130,8 +1137,8 @@ int main()
 
     // Audio Configruation
 
-    sf::SoundBuffer welc, slcOption, slcTeam, slcMatch, about;         // Sound Buffer
-    sf::Sound welcome, selectOption, selectTeam, selectMatch, aboutUS; // create a sound buffer
+    SoundBuffer welc, slcOption, slcTeam, slcMatch, about;         // Sound Buffer
+    Sound welcome, selectOption, selectTeam, selectMatch, aboutUS; // create a sound buffer
     if (isAudioOn == true)
     {
         welc.loadFromFile("./Audio/Welcome.wav");
@@ -1343,7 +1350,7 @@ int main()
             switch (selection)
             {
             case 1:
-                addTeam(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount);
+                addTeam(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, selectTeam);
                 cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
@@ -1351,7 +1358,7 @@ int main()
                 titleBox();
                 break;
             case 2:
-                removeTeam(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount);
+                removeTeam(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, selectTeam);
                 cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
@@ -1368,7 +1375,7 @@ int main()
                 titleBox();
                 break;
             case 4:
-                deleteMatch(ListMatch, numOfMatch);
+                deleteMatch(ListMatch, numOfMatch, selectMatch);
                 calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
                 cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
@@ -1377,7 +1384,7 @@ int main()
                 titleBox();
                 break;
             case 5:
-                changMemberInfo(ListTeam, numOfTeam);
+                changMemberInfo(ListTeam, numOfTeam, selectTeam, selectOption);
                 cout << "Bam ENTER de quay ve man hinh chinh...";
                 fflush(stdin);
                 getchar();
