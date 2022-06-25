@@ -60,6 +60,7 @@ public:
     // Constructor with parameters
     footBall_Player(string name, string id, string birthDay, string nationaly, int height, int weight, string locator);
     void showMemberInfo();      // Shows the member info
+    int getAge();               // Returns the age of the member
     friend class footBall_Team; // Friend class
 };
 class footBall_Team
@@ -78,14 +79,15 @@ private:
 public:
     footBall_Team();                                                 // Constructor
     footBall_Team(string &teamName, string &country, string &coach); // Constructor with parameters
-    void showInfo();                                                 // Shows the team info
-    void showDetail();                                               // Shows the team detail
-    void showPoint();                                                // Shows the team point
     string getTeamName();                                            // Returns the team name
     string getCoach();                                               // Returns the coach
     string getCountry();                                             // Returns the country
     string getMemberName(int index);                                 // Returns the member name
     int getPoint();                                                  // Returns the point
+    int getAvgAge();                                                 // Returns the average age of the team
+    void showInfo();                                                 // Shows the team info
+    void showDetail();                                               // Shows the team detail
+    void showPoint();                                                // Shows the team point
     void setPoint(int point);                                        // Sets the point
     void setDefaultPoint();                                          // Sets the default point
     void setWinMatch(int winMatch);                                  // Sets the win match
@@ -148,6 +150,24 @@ void footBall_Player ::showMemberInfo()
     cout << "|" << centerAlign(11, to_string(height));
     cout << "|" << centerAlign(16, nationaly);
     cout << "|" << endl;
+}
+int footBall_Player ::getAge()
+{
+    int age;
+    int yearOfBirth;
+    for (int i = birthDay.length(); i > 0; i--)
+        if (birthDay[i] == '/')
+        {
+            yearOfBirth = stoi(birthDay.substr(i + 1));
+            break;
+        }
+    // function substr be used to get the year of birth from the birthDay string ex. "01/01/2000" -> "2000"
+    time_t crt = time(0);
+    tm *currentTime = localtime(&crt);
+    int currentYear = 1900 + stoi(to_string(currentTime->tm_year));
+    // function time_t to GET current time FROM THE SYSTEM
+    age = currentYear - yearOfBirth;
+    return age = currentYear - yearOfBirth;
 }
 
 // Class footBall_Team Methods
@@ -212,15 +232,17 @@ void footBall_Team::showInfo()
 {
     cout << "| " << left << setw(25) << teamName
          << "| " << left << setw(20) << coach
+         << "|" << centerAlign(10, to_string(getAvgAge()))
          << "|" << centerAlign(16, country)
          << "|" << endl;
 }
 void footBall_Team::showDetail()
 {
-    string border = "+--------------------------+---------------------+----------------+";
+    string border = "+--------------------------+---------------------+----------+----------------+";
     cout << border << endl;
     cout << "|" << centerAlign(26, "TEN DOI BONG")
          << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(10, "TUOI TB")
          << "|" << centerAlign(16, "DIA PHUONG")
          << "|" << endl;
     cout << border << endl;
@@ -275,6 +297,13 @@ string footBall_Team::getMemberName(int index)
 int footBall_Team::getPoint()
 {
     return point;
+}
+int footBall_Team::getAvgAge()
+{
+    int sumAge = 0;
+    for (int i = 0; i < numOfPlayer; i++)
+        sumAge += member[i].getAge();
+    return sumAge / numOfPlayer;
 }
 void footBall_Team::setPoint(int point)
 {
@@ -807,11 +836,12 @@ void filter(footBall_Team *team, int n, Sound options)
         savedStatus = false; // Set the status of saved file to false
         clearSystemLog();
         cout << "Danh sach doi bong sau khi sap xep: " << endl;
-        string border = "+-----+--------------------------+---------------------+----------------+";
+        string border = "+-----+--------------------------+---------------------+----------+----------------+";
         cout << border << endl;
         cout << "|" << centerAlign(5, "STT")
              << "|" << centerAlign(26, "TEN DOI BONG")
              << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+             << "|" << centerAlign(10, "TUOI TB")
              << "|" << centerAlign(16, "DIA PHUONG")
              << "|" << endl;
         cout << border << endl;
@@ -843,11 +873,12 @@ void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
 void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam)
 {
     clearSystemLog();
-    string border = "+-----+--------------------------+---------------------+----------------+";
+    string border = "+-----+--------------------------+---------------------+----------+----------------+";
     cout << border << endl;
     cout << "|" << centerAlign(5, "STT")
          << "|" << centerAlign(26, "TEN DOI BONG")
          << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(10, "TUOI TB")
          << "|" << centerAlign(16, "DIA PHUONG")
          << "|" << endl;
     cout << border << endl;
@@ -873,11 +904,12 @@ void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, in
 void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selecTeam)
 {
     clearSystemLog();
-    string border = "+-----+--------------------------+---------------------+----------------+";
+    string border = "+-----+--------------------------+---------------------+----------+----------------+";
     cout << border << endl;
     cout << "|" << centerAlign(5, "STT")
          << "|" << centerAlign(26, "TEN DOI BONG")
          << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(10, "TUOI TB")
          << "|" << centerAlign(16, "DIA PHUONG")
          << "|" << endl;
     cout << border << endl;
@@ -905,11 +937,12 @@ void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &nu
     string teamName1, teamName2, stadium, time;
     int score1, score2;
     int select1, select2;
-    string border = "+-----+--------------------------+---------------------+----------------+";
+    string border = "+-----+--------------------------+---------------------+----------+----------------+";
     cout << border << endl;
     cout << "|" << centerAlign(5, "STT")
          << "|" << centerAlign(26, "TEN DOI BONG")
          << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(10, "TUOI TB")
          << "|" << centerAlign(16, "DIA PHUONG")
          << "|" << endl;
     cout << border << endl;
@@ -1034,11 +1067,12 @@ void searchTeam(footBall_Team *team, int numOfTeam)
 void changMemberInfo(footBall_Team *team, int numOfTeam, Sound selecTeam, Sound optional)
 {
     clearSystemLog();
-    string border = "+-----+--------------------------+---------------------+----------------+";
+    string border = "+-----+--------------------------+---------------------+----------+----------------+";
     cout << border << endl;
     cout << "|" << centerAlign(5, "STT")
          << "|" << centerAlign(26, "TEN DOI BONG")
          << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+         << "|" << centerAlign(10, "TUOI TB")
          << "|" << centerAlign(16, "DIA PHUONG")
          << "|" << endl;
     cout << border << endl;
@@ -1193,11 +1227,12 @@ int main()
         case 1:
         {
             clearSystemLog();
-            string border = "+-----+--------------------------+---------------------+----------------+";
+            string border = "+-----+--------------------------+---------------------+----------+----------------+";
             cout << border << endl;
             cout << "|" << centerAlign(5, "STT")
                  << "|" << centerAlign(26, "TEN DOI BONG")
                  << "|" << centerAlign(21, "HUAN LUYEN VIEN")
+                 << "|" << centerAlign(10, "TUOI TB")
                  << "|" << centerAlign(16, "DIA PHUONG")
                  << "|" << endl;
             cout << border << endl;
