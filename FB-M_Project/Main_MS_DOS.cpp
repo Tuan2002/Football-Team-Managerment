@@ -23,29 +23,29 @@ string centerAlign(int width, const string &str);
 void toProperCase(string &string);
 // Draws a border
 void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int numOfTeam);
-void showTeamTable(footBall_Team *team, int numOfTeam);
+void showTeamTable(footBall_Team *teamList, int numOfTeam);
 // Calculates the point of each team
-void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);
+void calcPoint(footBall_Match *matchList, int numofMatch, footBall_Team *teamList, int numofTeam);
 // Reads the file and stores the data in the arrays
-void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, footBall_Match *match, int &numOfMatch);
+void readFile(footBall_Team *teamList, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, footBall_Match *matchList, int &numOfMatch);
 // Exports the data to the file
-void exportFile(footBall_Team *team, int numOfTeam);
+void exportFile(footBall_Team *teamList, int numOfTeam);
 // Saves the modified data to the file
-void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *match, int numOfMatch);
+void saveModified(footBall_Team *teamList, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *matchList, int numOfMatch);
 // Filters the data
-void filter(footBall_Team *team, int n, Sound options);
-void showTeamInfo(footBall_Team *team, int n, string name1, string name2);                                                  // Shows the team info
-void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam);    // Adds a team
-void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam); // Removes a team
-void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch);                                  // Adds a match
-void deleteMatch(footBall_Match *match, int &numOfMatch, Sound selectMatch);                                                // Deletes a match
-void searchMember(footBall_Team *team, int numOfTeam);                                                                      // Searches a member
-void searchTeam(footBall_Team *team, int numOfTeam);                                                                        // Searches a team
-void changMemberInfo(footBall_Team *team, int numOfTeam, Sound selecTeam, Sound optional);                                  // Changes a member info
-void scoreBoard(footBall_Match *match, int numOfMatch);                                                                     // Shows the score board
-void titleBox();                                                                                                            // Shows the title box
-void aboutUS();                                                                                                             // Shows the about us box
-void backtoHome();                                                                                                          // Shows the back to home box
+void filter(footBall_Team *teamList, int n, Sound options);
+void showTeamInfo(footBall_Team *teamList, int n, string name1, string name2);                                                  // Shows the team info
+void addTeam(footBall_Team *teamList, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam);    // Adds a team
+void removeTeam(footBall_Team *teamList, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam); // Removes a team
+void addMatch(footBall_Team *teamList, int numOfTeam, footBall_Match *matchList, int &numOfMatch);                              // Adds a match
+void deleteMatch(footBall_Match *matchList, int &numOfMatch, Sound selectMatch);                                                // Deletes a match
+void searchMember(footBall_Team *teamList, int numOfTeam);                                                                      // Searches a member
+void searchTeam(footBall_Team *teamList, int numOfTeam);                                                                        // Searches a team
+void changMemberInfo(footBall_Team *teamList, int numOfTeam, Sound selecTeam, Sound optional);                                  // Changes a member info
+void scoreBoard(footBall_Match *matchList, int numOfMatch);                                                                     // Shows the score board
+void titleBox();                                                                                                                // Shows the title box
+void aboutUS();                                                                                                                 // Shows the about us box
+void backtoHome();                                                                                                              // Shows the back to home box
 class footBall_Player
 {
 private:
@@ -118,7 +118,7 @@ public:
     void exportMatchInfo(ofstream &fout);                                                                      // Exports the match info
     string getNameTeam1();                                                                                     // Returns the team 1 name
     string getNameTeam2();                                                                                     // Returns the team 2 name
-    friend void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam);          // Friend function
+    friend void calcPoint(footBall_Match *matchList, int numofMatch, footBall_Team *teamList, int numofTeam);  // Friend function
 };
 
 // Class footBall_Player Methods
@@ -168,7 +168,6 @@ int footBall_Player ::getAge()
     tm *currentTime = localtime(&crt);
     int currentYear = 1900 + stoi(to_string(currentTime->tm_year));
     // function time_t to GET current time FROM THE SYSTEM
-    age = currentYear - yearOfBirth;
     return age = currentYear - yearOfBirth;
 }
 
@@ -570,7 +569,7 @@ void drawBorder(ofstream &fout, string firstBorder, string expandBorder, int num
         fout << expandBorder;
     fout << endl;
 }
-void showTeamTable(footBall_Team *team, int numOfTeam)
+void showTeamTable(footBall_Team *teamList, int numOfTeam)
 {
     string border = "+-----+--------------------------+---------------------+----------+----------------+";
     cout << border << endl;
@@ -584,56 +583,56 @@ void showTeamTable(footBall_Team *team, int numOfTeam)
     for (int i = 0; i < numOfTeam; i++)
     {
         cout << "|" << centerAlign(5, to_string(i + 1));
-        team[i].showInfo();
+        teamList[i].showInfo();
     }
     cout << border << endl;
 }
-void calcPoint(footBall_Match *match, int numofMatch, footBall_Team *team, int numofTeam)
+void calcPoint(footBall_Match *matchList, int numofMatch, footBall_Team *teamList, int numofTeam)
 {
     for (int i = 0; i < numofTeam; i++)
-        team[i].setDefaultPoint(); // Reset the point of each team, so that the point will be recounted
+        teamList[i].setDefaultPoint(); // Reset the point of each team, so that the point will be recounted
     for (int i = 0; i < numofMatch; i++)
         // If the score of team 1 is greater than team 2, team 1 will get 3 point
-        if (match[i].score1 > match[i].score2)
+        if (matchList[i].score1 > matchList[i].score2)
             for (int j = 0; j < numofTeam; j++)
             {
-                if (match[i].getNameTeam1() == team[j].getTeamName()) // Find the team 1 in the team array to add 3 point
+                if (matchList[i].getNameTeam1() == teamList[j].getTeamName()) // Find the team 1 in the team array to add 3 point
                 {
-                    team[j].setPoint(3);
-                    team[j].setWinMatch(1); // Team 1 be added 1 win match
+                    teamList[j].setPoint(3);
+                    teamList[j].setWinMatch(1); // Team 1 be added 1 win match
                 };
-                if (match[i].getNameTeam2() == team[j].getTeamName())
-                    team[j].setLoseMatch(1); // Team 2 be added 1 lose match
+                if (matchList[i].getNameTeam2() == teamList[j].getTeamName())
+                    teamList[j].setLoseMatch(1); // Team 2 be added 1 lose match
             }
         // If the score of team 1 is smaller than team 2, team 2 will get 3 point
-        else if (match[i].score1 < match[i].score2)
+        else if (matchList[i].score1 < matchList[i].score2)
             for (int j = 0; j < numofTeam; j++)
             {
-                if (match[i].getNameTeam2() == team[j].getTeamName())
+                if (matchList[i].getNameTeam2() == teamList[j].getTeamName())
                 {
-                    team[j].setPoint(3);
-                    team[j].setWinMatch(1);
+                    teamList[j].setPoint(3);
+                    teamList[j].setWinMatch(1);
                 };
-                if (match[i].getNameTeam1() == team[j].getTeamName())
-                    team[j].setLoseMatch(1);
+                if (matchList[i].getNameTeam1() == teamList[j].getTeamName())
+                    teamList[j].setLoseMatch(1);
             }
         // If the score of team 1 is equal to team 2, both team will get 1 point
         else
             for (int j = 0; j < numofTeam; j++)
             {
-                if (match[i].getNameTeam1() == team[j].getTeamName())
+                if (matchList[i].getNameTeam1() == teamList[j].getTeamName())
                 {
-                    team[j].setPoint(1);
-                    team[j].setDrawMatch(1);
+                    teamList[j].setPoint(1);
+                    teamList[j].setDrawMatch(1);
                 }
-                if (match[i].getNameTeam2() == team[j].getTeamName())
+                if (matchList[i].getNameTeam2() == teamList[j].getTeamName())
                 {
-                    team[j].setPoint(1);
-                    team[j].setDrawMatch(1);
+                    teamList[j].setPoint(1);
+                    teamList[j].setDrawMatch(1);
                 }
             }
 }
-void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, footBall_Match *match, int &numOfMatch)
+void readFile(footBall_Team *teamList, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, footBall_Match *matchList, int &numOfMatch)
 {
     ifstream fin;                          // Declare a file input stream
     fin.open("./DS Doi Bong.csv");         // Open the file "DS Doi Bong.csv"
@@ -645,10 +644,10 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, i
         getline(fin, teamName, ';');
         getline(fin, coach, ';');
         getline(fin, temp, '\n');
-        int possiton = temp.find('\r');                        // Find the position of '\r', which is the same as '\n'.
-        country = temp.substr(0, possiton);                    // Get the country of the team without '\r'
-        team[count] = footBall_Team(teamName, country, coach); // Create a new team object and add it to the team array
-        count++;                                               // Increase the number of team
+        int possiton = temp.find('\r');                            // Find the position of '\r', which is the same as '\n'.
+        country = temp.substr(0, possiton);                        // Get the country of the team without '\r'
+        teamList[count] = footBall_Team(teamName, country, coach); // Create a new team object and add it to the team array
+        count++;                                                   // Increase the number of team
     }
     fin.close();
     numOfTeam = count; // Set the number of team to the number of team in the file
@@ -664,7 +663,7 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, i
         getline(fin, time, ';');
         getline(fin, score1, ';');
         getline(fin, score2, '\n');
-        match[count] = footBall_Match(stadium, time, team1_Name, team2_Name, stoi(score1), stoi(score2));
+        matchList[count] = footBall_Match(stadium, time, team1_Name, team2_Name, stoi(score1), stoi(score2));
         count++; // Increase the number of match
     }
     fin.close();
@@ -685,7 +684,7 @@ void readFile(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, i
     pendingTeamAmount = count; // Set the number of pending team to the number of pending team in the file
     fin.close();
 }
-void exportFile(footBall_Team *team, int numOfTeam)
+void exportFile(footBall_Team *teamList, int numOfTeam)
 {
     string title = "BANG TONG HOP THONG TIN DOI BONG";
     string firstBorder = "+---------------+";
@@ -713,34 +712,34 @@ void exportFile(footBall_Team *team, int numOfTeam)
     drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the second border
     fout << title2;
     for (int i = 0; i < numOfTeam; i++)
-        fout << centerAlign(23, team[i].getTeamName()) << "|"; // Print the name of team
+        fout << centerAlign(23, teamList[i].getTeamName()) << "|"; // Print the name of team
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the third border
     fout << title3;
     for (int i = 0; i < numOfTeam; i++)
-        fout << centerAlign(23, team[i].getCoach()) << "|"; // Print the name of coach
+        fout << centerAlign(23, teamList[i].getCoach()) << "|"; // Print the name of coach
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the fourth border
     fout << title4;
     for (int i = 0; i < numOfTeam; i++)
-        fout << centerAlign(23, team[i].getCountry()) << "|"; // Print the name of country
+        fout << centerAlign(23, teamList[i].getCountry()) << "|"; // Print the name of country
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the fifth border
     fout << title5;
     for (int i = 0; i < numOfTeam; i++)
-        fout << centerAlign(23, to_string(team[i].getPoint())) << "|"; // Print the point of team
+        fout << centerAlign(23, to_string(teamList[i].getPoint())) << "|"; // Print the point of team
     fout << endl;
     drawBorder(fout, firstBorder, expandBorder, numOfTeam);
     fout << title6;
     //* in the following code, I use a for loop to print one member of the all team in a line.
     for (int i = 0; i < numOfTeam; i++)
-        fout << left << " " << setw(22) << team[i].getMemberName(0) << "|"; // Print the name of first member
+        fout << left << " " << setw(22) << teamList[i].getMemberName(0) << "|"; // Print the name of first member
     fout << endl;
     for (int memberCount = 1; memberCount < 11; memberCount++)
     {
         fout << title7;
         for (int i = 0; i < numOfTeam; i++)
-            fout << left << " " << setw(22) << team[i].getMemberName(memberCount) << "|"; // Print the name of member
+            fout << left << " " << setw(22) << teamList[i].getMemberName(memberCount) << "|"; // Print the name of member
         fout << endl;
     }
     drawBorder(fout, firstBorder, expandBorder, numOfTeam); // Draw the sixth border
@@ -749,14 +748,14 @@ void exportFile(footBall_Team *team, int numOfTeam)
     string modifiedDay = "Ngay Tong Hop: " + to_string(localTime->tm_mday) + "/" + to_string(localTime->tm_mon + 1) + "/" + to_string(localTime->tm_year + 1900) + " - " + to_string(localTime->tm_hour) + ":" + to_string(localTime->tm_min) + ":" + to_string(localTime->tm_sec);
     fout << centerAlign(width, modifiedDay) << endl; // Print the modified day
 }
-void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *match, int numOfMatch)
+void saveModified(footBall_Team *teamList, int numOfTeam, footBall_Team *pendingTeam, int pendingTeamAmount, footBall_Match *matchList, int numOfMatch)
 {
     ofstream fout;
     fout.open("./DS Tran Dau.csv");
     fout << "SAN VAN DONG;DOI A;DOI B;THOI GIAN;SBT DOI A;SBT DOI B" << endl;
     for (int i = 0; i < numOfMatch; i++)
     {
-        match[i].exportMatchInfo(fout);
+        matchList[i].exportMatchInfo(fout);
         if (i == numOfMatch - 1)
             break;
         fout << endl;
@@ -766,14 +765,14 @@ void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam
     fout << "TEN DOI BONG;HUAN LUYEN VIEN;DIA PHUONG\n";
     for (int i = 0; i < numOfTeam; i++)
     {
-        fout << team[i].getTeamName() << ";"
-             << team[i].getCoach() << ";";
+        fout << teamList[i].getTeamName() << ";"
+             << teamList[i].getCoach() << ";";
         if (i == numOfTeam - 1)
         {
-            fout << team[i].getCountry();
+            fout << teamList[i].getCountry();
             break;
         }
-        fout << team[i].getCountry() << endl;
+        fout << teamList[i].getCountry() << endl;
     }
     fout.close();
     fout.open("./Doi Bong Cho.csv");
@@ -791,9 +790,9 @@ void saveModified(footBall_Team *team, int numOfTeam, footBall_Team *pendingTeam
     }
     fout.close();
     for (int i = 0; i < numOfTeam; i++)
-        team[i].saveChange();
+        teamList[i].saveChange();
 }
-void filter(footBall_Team *team, int n, Sound options)
+void filter(footBall_Team *teamList, int n, Sound options)
 {
     int FILT_ARRAY[50]; // Array to store the number of team that satisfy the filter
     int count = 0;
@@ -816,7 +815,7 @@ void filter(footBall_Team *team, int n, Sound options)
         getline(cin, country);
         toProperCase(country);
         for (int i = 0; i < n; i++)
-            if (team[i].getCountry() == country) // Check if the country is exist
+            if (teamList[i].getCountry() == country) // Check if the country is exist
             {
                 FILT_ARRAY[count] = i; // Store the index of team that satisfy the filter
                 count++;               // Increase the number of team that satisfy the filter
@@ -828,14 +827,14 @@ void filter(footBall_Team *team, int n, Sound options)
         {
             cout << "Co (" << count << ") doi bong thuoc dia phuong: " << country << endl;
             for (int i = 0; i < count; i++)
-                team[FILT_ARRAY[i]].showDetail();
+                teamList[FILT_ARRAY[i]].showDetail();
         }
         break;
     case 2:
         cout << "Nhap so diem can loc: ";
         cin >> point;
         for (int i = 0; i < n; i++)
-            if (team[i].getPoint() == point)
+            if (teamList[i].getPoint() == point)
             {
                 FILT_ARRAY[count] = i;
                 count++;
@@ -847,7 +846,7 @@ void filter(footBall_Team *team, int n, Sound options)
         {
             cout << "Co (" << count << ") doi bong co diem: " << point << endl;
             for (int i = 0; i < count; i++)
-                team[FILT_ARRAY[i]].showDetail();
+                teamList[FILT_ARRAY[i]].showDetail();
         }
         break;
     case 3:
@@ -855,36 +854,36 @@ void filter(footBall_Team *team, int n, Sound options)
         footBall_Team temp;
         for (int i = 0; i < n; i++)
             for (int j = i + 1; j < n; j++)
-                if (team[i].getPoint() < team[j].getPoint())
+                if (teamList[i].getPoint() < teamList[j].getPoint())
                 {
-                    temp = team[i];
-                    team[i] = team[j];
-                    team[j] = temp;
+                    temp = teamList[i];
+                    teamList[i] = teamList[j];
+                    teamList[j] = temp;
                 }
         savedStatus = false; // Set the status of saved file to false
         clearSystemLog();
         cout << "Danh sach doi bong sau khi sap xep: " << endl;
-        showTeamTable(team, n);
+        showTeamTable(teamList, n);
         break;
     }
 }
-void showTeamInfo(footBall_Team *team, int n, string name1, string name2)
+void showTeamInfo(footBall_Team *teamList, int n, string name1, string name2)
 {
     clearSystemLog();
     cout << "Thong tin doi thu nhat: " << endl;
     for (int i = 0; i < n; i++)
-        if (team[i].getTeamName() == name1)
-            team[i].showDetail();
+        if (teamList[i].getTeamName() == name1)
+            teamList[i].showDetail();
     cout << "Bam phim ENTER de tiep tuc xem ... ";
     fflush(stdin);
     getchar();
     clearSystemLog();
     cout << "Thong tin doi thu hai: " << endl;
     for (int i = 0; i < n; i++)
-        if (team[i].getTeamName() == name2)
-            team[i].showDetail();
+        if (teamList[i].getTeamName() == name2)
+            teamList[i].showDetail();
 }
-void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam)
+void addTeam(footBall_Team *teamList, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selectTeam)
 {
     clearSystemLog();
     showTeamTable(pendingTeam, pendingTeamAmount);
@@ -893,43 +892,43 @@ void addTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, in
     selectTeam.play();
     cout << "Chon doi bong co trong danh sach de them: ";
     cin >> select;
-    team[numOfTeam] = pendingTeam[select - 1]; // Add the team to the team array
-    numOfTeam++;                               // Increase the number of team
+    teamList[numOfTeam] = pendingTeam[select - 1]; // Add the team to the team array
+    numOfTeam++;                                   // Increase the number of team
     for (int i = select - 1; i < pendingTeamAmount - 1; i++)
         pendingTeam[i] = pendingTeam[i + 1]; // Remove the team from the pending team array
     pendingTeamAmount--;                     // Decrease the number of pending team
-    cout << "Doi bong da duoc them vao danh sach" << endl;
+    cout << "Doi bong '" << teamList[numOfTeam - 1].getTeamName() << "' da duoc them vao danh sach!" << endl;
     savedStatus = false;
 }
-void removeTeam(footBall_Team *team, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selecTeam)
+void removeTeam(footBall_Team *teamList, int &numOfTeam, footBall_Team *pendingTeam, int &pendingTeamAmount, Sound selecTeam)
 {
     clearSystemLog();
-    showTeamTable(team, numOfTeam);
+    showTeamTable(teamList, numOfTeam);
     selecTeam.play();
     int select;
     cout << "Chon doi bong co trong danh sach can xoa: ";
     cin >> select;
-    pendingTeam[pendingTeamAmount] = team[select - 1]; // Add the team to the pending team array
-    pendingTeamAmount++;                               // Increase the number of pending team
+    pendingTeam[pendingTeamAmount] = teamList[select - 1]; // Add the team to the pending team array
+    pendingTeamAmount++;                                   // Increase the number of pending team
     for (int i = select - 1; i < numOfTeam - 1; i++)
-        team[i] = team[i + 1]; // Remove the team from the team array
-    numOfTeam--;               // Decrease the number of team
-    cout << "Da xoa mot doi bong thanh cong!\n";
+        teamList[i] = teamList[i + 1]; // Remove the team from the team array
+    numOfTeam--;                       // Decrease the number of team
+    cout << "Da xoa doi bong '" << pendingTeam[pendingTeamAmount - 1].getTeamName() << "'thanh cong!\n";
     savedStatus = false; // Set the status of saved file to false
 }
-void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &numOfMatch)
+void addMatch(footBall_Team *teamList, int numOfTeam, footBall_Match *matchList, int &numOfMatch)
 {
     clearSystemLog();
     string teamName1, teamName2, stadium, time;
     int score1, score2;
     int select1, select2;
-    showTeamTable(team, numOfTeam);
+    showTeamTable(teamList, numOfTeam);
     cout << "Chon doi thu nhat: ";
     cin >> select1;
     cout << "Chon doi thu hai: ";
     cin >> select2;
-    teamName1 = team[select1 - 1].getTeamName(); // Get the name of team 1
-    teamName2 = team[select2 - 1].getTeamName(); // Get the name of team 2
+    teamName1 = teamList[select1 - 1].getTeamName(); // Get the name of team 1
+    teamName2 = teamList[select2 - 1].getTeamName(); // Get the name of team 2
     cout << "Nhap ten SVD: ";
     fflush(stdin);
     getline(cin, stadium);
@@ -938,12 +937,12 @@ void addMatch(footBall_Team *team, int numOfTeam, footBall_Match *match, int &nu
     getline(cin, time);
     cout << "Nhap ti so cua tran dau: ";
     cin >> score1 >> score2;
-    match[numOfMatch] = footBall_Match(stadium, time, teamName1, teamName2, score1, score2); // Create a new match object and add it to the match array
-    numOfMatch++;                                                                            // Increase the number of match
+    matchList[numOfMatch] = footBall_Match(stadium, time, teamName1, teamName2, score1, score2); // Create a new match object and add it to the match array
+    numOfMatch++;                                                                                // Increase the number of match
     cout << "Da them mot tran dau thanh cong!\n";
     savedStatus = false; // Set the status of saved file to false
 }
-void deleteMatch(footBall_Match *match, int &numOfMatch, Sound sltMatch)
+void deleteMatch(footBall_Match *matchList, int &numOfMatch, Sound sltMatch)
 {
     string border = "+-----+---------------------+------------+---------------------+---------------+---------------------+";
     cout << border << endl;
@@ -958,7 +957,7 @@ void deleteMatch(footBall_Match *match, int &numOfMatch, Sound sltMatch)
     for (int i = 0; i < numOfMatch; i++)
     {
         cout << "|" << centerAlign(5, to_string(i + 1));
-        match[i].showMatchInfo();
+        matchList[i].showMatchInfo();
     }
     cout << border << endl;
     sltMatch.play();
@@ -967,13 +966,13 @@ void deleteMatch(footBall_Match *match, int &numOfMatch, Sound sltMatch)
     cin >> selectMatch;
     for (int i = selectMatch - 1; i < numOfMatch - 1; i++)
     {
-        match[i] = match[i + 1]; // Remove a match from match array
+        matchList[i] = matchList[i + 1]; // Remove a match from match array
     }
     numOfMatch--; // Decrease the number of match
-    cout << "Da xoa tran dau thanh cong!" << endl;
+    cout << "Da xoa tran dau (" << selectMatch << ") thanh cong!" << endl;
     savedStatus = false;
 }
-void searchMember(footBall_Team *team, int numOfTeam)
+void searchMember(footBall_Team *teamList, int numOfTeam)
 {
     footBall_Player *searchResult = new footBall_Player[10];
     string name;
@@ -983,10 +982,10 @@ void searchMember(footBall_Team *team, int numOfTeam)
     toProperCase(name);
     int count = 0;
     for (int i = 0; i < numOfTeam; i++)
-        if (team[i].isPlayerExist(name) == true) // if player exist in team
+        if (teamList[i].isPlayerExist(name) == true) // if player exist in team
         {
-            searchResult[count] = team[i].searchPlayer(name); // Add player to search result array
-            count++;                                          // increase count
+            searchResult[count] = teamList[i].searchPlayer(name); // Add player to search result array
+            count++;                                              // increase count
         }
     if (count > 0)
     {
@@ -1010,7 +1009,7 @@ void searchMember(footBall_Team *team, int numOfTeam)
         cout << "Khong tim thay cau thu nao co ten: " << name << endl;
     }
 }
-void searchTeam(footBall_Team *team, int numOfTeam)
+void searchTeam(footBall_Team *teamList, int numOfTeam)
 {
     footBall_Team searchResult; // Create a team object to store the result of search
     string name;
@@ -1020,10 +1019,10 @@ void searchTeam(footBall_Team *team, int numOfTeam)
     getline(cin, name);
     toProperCase(name);
     for (int i = 0; i < numOfTeam; i++)
-        if (team[i].getTeamName() == name)
+        if (teamList[i].getTeamName() == name)
         {
-            searchResult = team[i]; // Add team to search result object
-            isExist = true;         // Set isExist to true
+            searchResult = teamList[i]; // Add team to search result object
+            isExist = true;             // Set isExist to true
             break;
         }
     if (isExist == true) // Check if team exist
@@ -1036,17 +1035,17 @@ void searchTeam(footBall_Team *team, int numOfTeam)
         cout << "Khong tim thay doi co ten: " << name << endl;
     }
 }
-void changMemberInfo(footBall_Team *team, int numOfTeam, Sound selecTeam, Sound optional)
+void changMemberInfo(footBall_Team *teamList, int numOfTeam, Sound selecTeam, Sound optional)
 {
     clearSystemLog();
-    showTeamTable(team, numOfTeam);
+    showTeamTable(teamList, numOfTeam);
     selecTeam.play(); // Play sound
     int select;
     cout << "Chon doi bong: ";
     cin >> select;
-    team[select - 1].changePlayerInfo(optional); // Change player info of team
+    teamList[select - 1].changePlayerInfo(optional); // Change player info of team
 }
-void scoreBoard(footBall_Match *match, int numOfMatch)
+void scoreBoard(footBall_Match *matchList, int numOfMatch)
 {
     string border = "+-----+---------------------+------------+---------------------+---------------+---------------------+";
     cout << border << endl;
@@ -1061,7 +1060,7 @@ void scoreBoard(footBall_Match *match, int numOfMatch)
     for (int i = 0; i < numOfMatch; i++)
     {
         cout << "|" << centerAlign(5, to_string(i + 1));
-        match[i].showMatchInfo();
+        matchList[i].showMatchInfo();
     }
     cout << border << endl;
 }
@@ -1122,10 +1121,10 @@ int main()
 {
     int numOfTeam, pendingTeamAmount, numOfMatch;           // Number of team, number of pending team, number of match
     footBall_Team *ListPendingTeam = new footBall_Team[20]; // Create list of pending team
-    footBall_Team *ListTeam = new footBall_Team[20];        // Create list of team
-    footBall_Match *ListMatch = new footBall_Match[20];     // Create list of match
-    readFile(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, ListMatch, numOfMatch);
-    calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
+    footBall_Team *teamList = new footBall_Team[20];        // Create list of team
+    footBall_Match *matchList = new footBall_Match[20];     // Create list of match
+    readFile(teamList, numOfTeam, ListPendingTeam, pendingTeamAmount, matchList, numOfMatch);
+    calcPoint(matchList, numOfMatch, teamList, numOfTeam);
 
     // Audio Configruation
 
@@ -1175,14 +1174,14 @@ int main()
         case '1':
         {
             clearSystemLog();
-            showTeamTable(ListTeam, numOfTeam);
+            showTeamTable(teamList, numOfTeam);
             int select;
             if (isAudioOn == true)
                 selectTeam.play();
             cout << "Chon doi bong can xem thong tin chi tiet: ";
             cin >> select;
             clearSystemLog();
-            ListTeam[select - 1].showDetail();
+            teamList[select - 1].showDetail();
             backtoHome();
             break;
         }
@@ -1190,7 +1189,7 @@ int main()
         {
             int selection;
             clearSystemLog();
-            scoreBoard(ListMatch, numOfMatch);
+            scoreBoard(matchList, numOfMatch);
             if (isAudioOn == true)
                 selectOption.play();
             cout << "1. Xem thong tin chi tiet hai doi" << endl;
@@ -1203,20 +1202,20 @@ int main()
             case 1:
             {
                 clearSystemLog();
-                scoreBoard(ListMatch, numOfMatch);
+                scoreBoard(matchList, numOfMatch);
                 if (isAudioOn == true)
                     selectMatch.play();
                 cout << "Chon tran dau: ";
                 int choice;
                 cin >> choice;
-                showTeamInfo(ListTeam, numOfTeam, ListMatch[choice - 1].getNameTeam1(), ListMatch[choice - 1].getNameTeam2());
+                showTeamInfo(teamList, numOfTeam, matchList[choice - 1].getNameTeam1(), matchList[choice - 1].getNameTeam2());
                 backtoHome();
                 break;
             }
             case 2:
             {
                 clearSystemLog();
-                scoreBoard(ListMatch, numOfMatch);
+                scoreBoard(matchList, numOfMatch);
                 if (isAudioOn == true)
                     selectMatch.play();
                 cout << "Chon tran dau: ";
@@ -1234,10 +1233,10 @@ int main()
                 cout << border << endl;
                 for (int i = 0; i < numOfTeam; i++)
                 {
-                    if (ListTeam[i].getTeamName() == ListMatch[choice - 1].getNameTeam1())
-                        ListTeam[i].showPoint();
-                    if (ListTeam[i].getTeamName() == ListMatch[choice - 1].getNameTeam2())
-                        ListTeam[i].showPoint();
+                    if (teamList[i].getTeamName() == matchList[choice - 1].getNameTeam1())
+                        teamList[i].showPoint();
+                    if (teamList[i].getTeamName() == matchList[choice - 1].getNameTeam2())
+                        teamList[i].showPoint();
                 }
                 cout << border << endl;
                 backtoHome();
@@ -1269,7 +1268,7 @@ int main()
             for (int i = 0; i < numOfTeam; i++)
             {
                 cout << "|" << centerAlign(5, to_string(i + 1));
-                ListTeam[i].showPoint();
+                teamList[i].showPoint();
             }
             cout << border << endl;
             backtoHome();
@@ -1278,7 +1277,7 @@ int main()
         case '4':
         {
             clearSystemLog();
-            filter(ListTeam, numOfTeam, selectOption);
+            filter(teamList, numOfTeam, selectOption);
             backtoHome();
             break;
         }
@@ -1299,25 +1298,25 @@ int main()
             switch (selection)
             {
             case 1:
-                addTeam(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, selectTeam);
+                addTeam(teamList, numOfTeam, ListPendingTeam, pendingTeamAmount, selectTeam);
                 backtoHome();
                 break;
             case 2:
-                removeTeam(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, selectTeam);
+                removeTeam(teamList, numOfTeam, ListPendingTeam, pendingTeamAmount, selectTeam);
                 backtoHome();
                 break;
             case 3:
-                addMatch(ListTeam, numOfTeam, ListMatch, numOfMatch);
-                calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
+                addMatch(teamList, numOfTeam, matchList, numOfMatch);
+                calcPoint(matchList, numOfMatch, teamList, numOfTeam);
                 backtoHome();
                 break;
             case 4:
-                deleteMatch(ListMatch, numOfMatch, selectMatch);
-                calcPoint(ListMatch, numOfMatch, ListTeam, numOfTeam);
+                deleteMatch(matchList, numOfMatch, selectMatch);
+                calcPoint(matchList, numOfMatch, teamList, numOfTeam);
                 backtoHome();
                 break;
             case 5:
-                changMemberInfo(ListTeam, numOfTeam, selectTeam, selectOption);
+                changMemberInfo(teamList, numOfTeam, selectTeam, selectOption);
                 backtoHome();
                 break;
             default:
@@ -1341,12 +1340,12 @@ int main()
             {
             case 1:
                 clearSystemLog();
-                searchMember(ListTeam, numOfTeam);
+                searchMember(teamList, numOfTeam);
                 backtoHome();
                 break;
             case 2:
                 clearSystemLog();
-                searchTeam(ListTeam, numOfTeam);
+                searchTeam(teamList, numOfTeam);
                 backtoHome();
                 break;
             }
@@ -1360,7 +1359,7 @@ int main()
             clearSystemLog();
             if (savedStatus == false)
             {
-                saveModified(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, ListMatch, numOfMatch);
+                saveModified(teamList, numOfTeam, ListPendingTeam, pendingTeamAmount, matchList, numOfMatch);
                 cout << "Da luu du lieu thanh cong!" << endl;
                 savedStatus = true;
             }
@@ -1372,7 +1371,7 @@ int main()
         case '8':
         {
             clearSystemLog();
-            exportFile(ListTeam, numOfTeam);
+            exportFile(teamList, numOfTeam);
             cout << "Xuat file thanh cong" << endl;
             backtoHome();
             break;
@@ -1397,7 +1396,7 @@ int main()
                 cin >> choice;
                 if (choice == 'y' || choice == 'Y')
                 {
-                    saveModified(ListTeam, numOfTeam, ListPendingTeam, pendingTeamAmount, ListMatch, numOfMatch);
+                    saveModified(teamList, numOfTeam, ListPendingTeam, pendingTeamAmount, matchList, numOfMatch);
                     cout << "Da luu du lieu thanh cong!" << endl;
                     savedStatus = true;
                 }
